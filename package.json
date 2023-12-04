@@ -2,6 +2,28 @@
   "name": "@devmehq/libphonenumber-js",
   "version": "1.2.6",
   "description": "This library includes the geocoding, carrier mapping and timezone mapping functionalities that are available in some of googles libphonenumber libraries but not in libphonenumber-js (a port of libphonenumber).",
+  "keywords": [
+    "telephone",
+    "phone",
+    "number",
+    "geo",
+    "geocode",
+    "location",
+    "carrier",
+    "timezone",
+    "timezones",
+    "international",
+    "libphonenumber"
+  ],
+  "bugs": {
+    "url": "https://github.com/devmehq/libphonenumber-js/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/devmehq/libphonenumber-js"
+  },
+  "license": "MIT",
+  "author": "Martin Mende",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
@@ -9,14 +31,15 @@
     "lib",
     "resources"
   ],
-  "author": "Martin Mende",
-  "license": "MIT",
   "scripts": {
     "build": "rimraf lib && rollup -c",
-    "watch": "rimraf lib && rollup -cw",
-    "prepublishOnly": "yarn build",
     "preparemetadata": "rimraf resources && node tools/prepare.js && rimraf resources/libphonenumber",
-    "test": "jest"
+    "prepublishOnly": "yarn build",
+    "test": "jest",
+    "watch": "rimraf lib && rollup -cw"
+  },
+  "dependencies": {
+    "bson": "^6.2.0"
   },
   "devDependencies": {
     "@types/bson": "^4.2.0",
@@ -34,30 +57,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.3.2"
   },
-  "dependencies": {
-    "bson": "^6.2.0"
-  },
   "peerDependencies": {
     "libphonenumber-js": "^1.9.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/devmehq/libphonenumber-js"
-  },
-  "bugs": {
-    "url": "https://github.com/devmehq/libphonenumber-js/issues"
-  },
-  "keywords": [
-    "telephone",
-    "phone",
-    "number",
-    "geo",
-    "geocode",
-    "location",
-    "carrier",
-    "timezone",
-    "timezones",
-    "international",
-    "libphonenumber"
-  ]
+  }
 }

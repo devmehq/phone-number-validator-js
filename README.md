@@ -1,7 +1,7 @@
 # Phonenumber geo-, carrier- and timezone infos
 
-<a href="https://www.npmjs.com/package/libphonenumber-geo-carrier"><img title="npm version" src="https://badgen.net/npm/v/libphonenumber-geo-carrier" ></a>
-<a href="https://www.npmjs.com/package/libphonenumber-geo-carrier"><img title="npm downloads" src="https://badgen.net/npm/dt/libphonenumber-geo-carrier?icon=npm"></a>
+<a href="https://www.npmjs.com/package/@devmehq/libphonenumber-js"><img title="npm version" src="https://badgen.net/npm/v/@devmehq/libphonenumber-js" ></a>
+<a href="https://www.npmjs.com/package/@devmehq/libphonenumber-js"><img title="npm downloads" src="https://badgen.net/npm/dt/@devmehq/libphonenumber-js?icon=npm"></a>
 
 This library includes the geocoding, carrier mapping and timezone mapping functionalities that are available in some of googles [libphonenumber](https://github.com/google/libphonenumber) libraries but not in [libphonenumber-js](https://gitlab.com/catamphetamine/libphonenumber-js) (a port of libphonenumber).
 
@@ -12,13 +12,13 @@ The library supports Node.js only at the moment.
 ## Installation
 
 ```sh
-npm install libphonenumber-js libphonenumber-geo-carrier
+npm install @devmehq/libphonenumber-js
 ```
 
 or
 
 ```sh
-yarn add libphonenumber-js libphonenumber-geo-carrier
+yarn add @devmehq/libphonenumber-js
 ```
 
 ## Usage
@@ -33,7 +33,7 @@ The available methods are:
 
 ```js
 import parsePhoneNumberFromString from 'libphonenumber-js'
-import { geocoder, carrier, timezones } from 'libphonenumber-geo-carrier'
+import { geocoder, carrier, timezones } from '@devmehq/libphonenumber-js'
 
 const main = async () => {
   const fixedLineNumber = parsePhoneNumberFromString('+41431234567')
