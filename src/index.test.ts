@@ -3,8 +3,12 @@
  * should probably include much more test cases
  */
 
-import parsePhoneNumberFromString from 'libphone-number-validator-js'
-import { geocoder, carrier, timezones } from './index'
+import {
+  carrier,
+  geocoder,
+  parsePhoneNumberFromString,
+  timezones,
+} from './index'
 
 it('geocodes with default locale en', async () => {
   const phoneNr = parsePhoneNumberFromString('+41431234567')

@@ -82,3 +82,14 @@ const carrierZH = carrier(mobileNumber, 'zh') // 中国电信
 const fixedLineNumber2 = parsePhoneNumberFromString('+49301234567')
 const tzones = timezones(fixedLineNumber2) // ['Europe/Berlin']
 ```
+
+
+## Testing
+```bash
+yarn test
+```
+
+## Contributing
+Please feel free to open an issue or create a pull request and fix bugs or add features, All contributions are welcome. Thank you!
+
+## LICENSE [MIT](LICENSE.md)
