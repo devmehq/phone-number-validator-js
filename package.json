@@ -35,7 +35,7 @@
   "scripts": {
     "build": "rimraf lib && rollup -c --bundleConfigAsCjs",
     "preparemetadata": "rimraf resources && node tools/prepare.js && rimraf resources/libphonenumber",
-    "prepublishOnly": "yarn preparemetadata && yarn build",
+    "prepublishOnly": "yarn build",
     "test": "jest",
     "watch": "rimraf lib && rollup -cw"
   },

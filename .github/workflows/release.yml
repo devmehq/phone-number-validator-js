@@ -45,6 +45,7 @@ jobs:
 
       - name: Test
         run: |
+          yarn preparemetadata
           yarn test
 
       - name: Release
