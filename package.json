@@ -15,6 +15,7 @@
     "international",
     "libphonenumber"
   ],
+  "homepage": "https://github.com/devmehq/libphonenumber-js#readme",
   "bugs": {
     "url": "https://github.com/devmehq/libphonenumber-js/issues"
   },
@@ -23,7 +24,7 @@
     "url": "https://github.com/devmehq/libphonenumber-js"
   },
   "license": "MIT",
-  "author": "Martin Mende",
+  "author": "DEV.ME <support@dev.me> (https://dev.me)",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
