@@ -1,5 +1,5 @@
 {
-  "name": "@devme/libphonenumber-js",
+  "name": "@devmehq/libphonenumber-js",
   "version": "1.2.6",
   "description": "This library includes the geocoding, carrier mapping and timezone mapping functionalities that are available in some of googles libphonenumber libraries but not in libphonenumber-js (a port of libphonenumber).",
   "main": "lib/index.js",
@@ -42,10 +42,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mmende/libphonenumber-geo-carrier"
+    "url": "https://github.com/devmehq/libphonenumber-js"
   },
   "bugs": {
-    "url": "https://github.com/mmende/libphonenumber-geo-carrier/issues"
+    "url": "https://github.com/devmehq/libphonenumber-js/issues"
   },
   "keywords": [
     "telephone",

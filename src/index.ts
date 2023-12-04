@@ -1,12 +1,11 @@
 import { PhoneNumber } from 'libphonenumber-js'
-import { GeocoderLocale, CarrierLocale } from './locales'
-import fs from 'fs'
-import { promisify } from 'util'
+import { CarrierLocale, GeocoderLocale } from './locales'
+import { readFileSync } from 'fs'
 import { deserialize } from 'bson'
-import path from 'path'
+import { join } from 'path'
+import { Document } from 'bson/src/bson'
 
-const access = promisify(fs.access)
-const readFile = promisify(fs.readFile)
+const codeData: Record<string, Document> = {}
 
 /**
  * Maps the dataPath and prefix to geocode, carrier, timezones or null if this info could not be extracted
@@ -16,11 +15,13 @@ const readFile = promisify(fs.readFile)
  * @param dataPath Path of the metadata bson file to use
  * @param nationalNumber The national (significant) number without whitespaces e.g. `2133734253`
  */
-const getCode = async (dataPath: string, nationalNumber: string) => {
+function getCode(dataPath: string, nationalNumber: string) {
   try {
-    await access(dataPath)
-    const bData = await readFile(dataPath)
-    const data = deserialize(bData)
+    if (!codeData[dataPath]) {
+      const bData = readFileSync(dataPath)
+      codeData[dataPath] = deserialize(bData)
+    }
+    const data = codeData[dataPath]
     let prefix = nationalNumber
     // Find the longest match
     while (prefix.length > 0) {
@@ -43,36 +44,36 @@ const getCode = async (dataPath: string, nationalNumber: string) => {
  * @param phonenumber The phone number
  * @param locale The preferred locale to use (falls back to `en` if there are no localized carrier infos for the given locale)
  */
-export const geocoder = async (
+export function geocoder(
   phonenumber: PhoneNumber | undefined,
   locale: GeocoderLocale = 'en'
-) => {
+) {
   const nationalNumber = phonenumber?.nationalNumber.toString()
   const countryCallingCode = phonenumber?.countryCallingCode.toString()
   if (!nationalNumber || !countryCallingCode) {
     return null
   }
-  let dataPath = path.join(
+  let dataPath = join(
     __dirname,
     '../resources/geocodes/',
     locale,
     `${countryCallingCode}.bson`
   )
   // const code = await getCode(dataPath, prefix)
-  const code = await getCode(dataPath, nationalNumber)
+  const code = getCode(dataPath, nationalNumber)
   if (code) {
     return code
   }
   if (locale !== 'en') {
     // Try fallback to english
-    dataPath = path.join(
+    dataPath = join(
       __dirname,
       '../resources/geocodes/',
       'en',
       `${countryCallingCode}.bson`
     )
     // return await getCode(dataPath, prefix)
-    return await getCode(dataPath, nationalNumber)
+    return getCode(dataPath, nationalNumber)
   }
   return null
 }
@@ -87,10 +88,10 @@ export const geocoder = async (
  * @param phonenumber The phone number
  * @param locale The preferred locale to use (falls back to `en` if there are no localized carrier infos for the given locale)
  */
-export const carrier = async (
+export function carrier(
   phonenumber: PhoneNumber | undefined,
   locale: CarrierLocale = 'en'
-) => {
+) {
   if (!phonenumber) {
     return null
   }
@@ -99,27 +100,27 @@ export const carrier = async (
   if (!nationalNumber || !countryCallingCode) {
     return null
   }
-  let dataPath = path.join(
+  let dataPath = join(
     __dirname,
     '../resources/carrier/',
     locale,
     `${countryCallingCode}.bson`
   )
   // const code = await getCode(dataPath, prefix)
-  const code = await getCode(dataPath, nationalNumber)
+  const code = getCode(dataPath, nationalNumber)
   if (code) {
     return code
   }
   if (locale !== 'en') {
     // Try fallback to english
-    dataPath = path.join(
+    dataPath = join(
       __dirname,
       '../resources/carrier/',
       'en',
       `${countryCallingCode}.bson`
     )
     // return await getCode(dataPath, prefix)
-    return await getCode(dataPath, nationalNumber)
+    return getCode(dataPath, nationalNumber)
   }
   return null
 }
@@ -128,14 +129,14 @@ export const carrier = async (
  * Provides all timezones related to the phone number
  * @param phonenumber The phone number
  */
-export const timezones = async (phonenumber: PhoneNumber | undefined) => {
+export function timezones(phonenumber: PhoneNumber | undefined) {
   let nr = phonenumber?.number.toString()
   if (!nr) {
     return null
   }
   nr = nr.replace(/^\+/, '')
-  let dataPath = path.join(__dirname, '../resources/timezones.bson')
-  const zones = await getCode(dataPath, nr)
+  let dataPath = join(__dirname, '../resources/timezones.bson')
+  const zones = getCode(dataPath, nr)
   if (typeof zones === 'string') {
     return zones.split('&')
   }
