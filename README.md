@@ -1,4 +1,4 @@
-# Phonenumber carrier name, geo and timezone infos
+# Phone Number information lookup, validation,  carrier name, geo and timezone infos
 
 [![NPM version](https://badgen.net/npm/v/@devmehq/libphonenumber-js)](https://npm.im/@devmehq/libphonenumber-js)
 [![Build Status](https://github.com/devmehq/libphonenumber-js/workflows/CI/badge.svg)](https://github.com/devmehq/libphonenumber-js/actions)
