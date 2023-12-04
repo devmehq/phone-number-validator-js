@@ -1,3 +1,4 @@
+export * from 'libphonenumber-js'
 import { PhoneNumber } from 'libphonenumber-js'
 import { CarrierLocale, GeocoderLocale } from './locales'
 import { readFileSync } from 'fs'

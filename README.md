@@ -1,4 +1,4 @@
-# Phonenumber geo-, carrier- and timezone infos
+# Phonenumber carrier name, geo and timezone infos
 
 <a href="https://www.npmjs.com/package/@devmehq/libphonenumber-js"><img title="npm version" src="https://badgen.net/npm/v/@devmehq/libphonenumber-js" ></a>
 <a href="https://www.npmjs.com/package/@devmehq/libphonenumber-js"><img title="npm downloads" src="https://badgen.net/npm/dt/@devmehq/libphonenumber-js?icon=npm"></a>
@@ -32,22 +32,17 @@ The available methods are:
 ## Examples
 
 ```js
-import parsePhoneNumberFromString from 'libphonenumber-js'
-import { geocoder, carrier, timezones } from '@devmehq/libphonenumber-js'
+import { geocoder, carrier, timezones, parsePhoneNumberFromString } from '@devmehq/libphonenumber-js'
 
-const main = async () => {
-  const fixedLineNumber = parsePhoneNumberFromString('+41431234567')
-  const locationEN = await geocoder(fixedLineNumber) // Zurich
-  const locationDE = await geocoder(fixedLineNumber, 'de') // Zürich
-  const locationIT = await geocoder(fixedLineNumber, 'it') // Zurigo
+const fixedLineNumber = parsePhoneNumberFromString('+41431234567')
+const locationEN = geocoder(fixedLineNumber) // Zurich
+const locationDE = geocoder(fixedLineNumber, 'de') // Zürich
+const locationIT = geocoder(fixedLineNumber, 'it') // Zurigo
 
-  const mobileNumber = parsePhoneNumberFromString('+8619912345678')
-  const carrierEN = await carrier(mobileNumber) // China Telecom
-  const carrierZH = await carrier(mobileNumber, 'zh') // 中国电信
+const mobileNumber = parsePhoneNumberFromString('+8619912345678')
+const carrierEN = carrier(mobileNumber) // China Telecom
+const carrierZH = carrier(mobileNumber, 'zh') // 中国电信
 
-  const fixedLineNumber2 = parsePhoneNumberFromString('+49301234567')
-  const tzones = await timezones(fixedLineNumber2) // ['Europe/Berlin']
-}
-
-main()
+const fixedLineNumber2 = parsePhoneNumberFromString('+49301234567')
+const tzones = timezones(fixedLineNumber2) // ['Europe/Berlin']
 ```
