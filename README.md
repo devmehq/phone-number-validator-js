@@ -61,9 +61,9 @@ yarn add @devmehq/phone-number-validator-js
 
 The available methods are:
 
-- `geocoder(phonenumber: PhoneNumber, locale?: GeocoderLocale = 'en'): Promise<string | null>` - Resolved to the geocode or null if no geocode could be found (e.g. for mobile numbers)
-- `carrier(phonenumber: PhoneNumber, locale?: CarrierLocale = 'en'): Promise<string | null>` - Resolves to the carrier or null if non could be found (e.g. for fixed line numbers)
-- `timezones(phonenumber: PhoneNumber): Promise<Array<string> | null>` - Resolved to an array of timezones or null if non where found.
+- `geocoder(phonenumber: PhoneNumber, locale?: GeocoderLocale = 'en'): string | null` - Resolved to the geocode or null if no geocode could be found (e.g. for mobile numbers)
+- `carrier(phonenumber: PhoneNumber, locale?: CarrierLocale = 'en'): string | null` - Resolves to the carrier or null if non could be found (e.g. for fixed line numbers)
+- `timezones(phonenumber: PhoneNumber): Array<string> | null` - Resolved to an array of timezones or null if non where found.
 
 ## Examples
 
