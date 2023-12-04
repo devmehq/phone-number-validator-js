@@ -1,9 +1,8 @@
 import { PhoneNumber } from 'libphonenumber-js'
 import { CarrierLocale, GeocoderLocale } from './locales'
 import { readFileSync } from 'fs'
-import { deserialize } from 'bson'
+import { deserialize, Document } from 'bson'
 import { join } from 'path'
-import { Document } from 'bson/src/bson'
 
 const codeData: Record<string, Document> = {}
 
