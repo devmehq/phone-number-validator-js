@@ -1,11 +1,11 @@
 # Phone Number information lookup, validation,  carrier name, geo and timezone infos
 
-[![NPM version](https://badgen.net/npm/v/@devmehq/libphonenumber-js)](https://npm.im/@devmehq/libphonenumber-js)
-[![Build Status](https://github.com/devmehq/libphonenumber-js/workflows/CI/badge.svg)](https://github.com/devmehq/libphonenumber-js/actions)
-[![Downloads](https://img.shields.io/npm/dm/libphonenumber-js.svg)](https://www.npmjs.com/package/libphonenumber-js)
-[![UNPKG](https://img.shields.io/badge/UNPKG-OK-179BD7.svg)](https://unpkg.com/browse/@devmehq/libphonenumber-js@latest/)
+[![NPM version](https://badgen.net/npm/v/@devmehq/phonenumber-js)](https://npm.im/@devmehq/phonenumber-js)
+[![Build Status](https://github.com/devmehq/phonenumber-js/workflows/CI/badge.svg)](https://github.com/devmehq/phonenumber-js/actions)
+[![Downloads](https://img.shields.io/npm/dm/phonenumber-js.svg)](https://www.npmjs.com/package/phonenumber-js)
+[![UNPKG](https://img.shields.io/badge/UNPKG-OK-179BD7.svg)](https://unpkg.com/browse/@devmehq/phonenumber-js@latest/)
 
-This library includes the geocoding, carrier mapping and timezone mapping functionalities that are available in some of googles [libphonenumber](https://github.com/google/libphonenumber) libraries but not in [libphonenumber-js](https://gitlab.com/catamphetamine/libphonenumber-js) (a port of libphonenumber).
+This library includes the geocoding, carrier mapping and timezone mapping functionalities that are available in some of googles [libphonenumber](https://github.com/google/phonenumber-js) libraries but not in [libphonenumber-js](https://gitlab.com/catamphetamine/phonenumber-js) (a port of libphonenumber).
 
 To reduce the amount of data that needs to be loaded to geocode / carrier map a phonenumber for each mapping only the relevant number prefixes are loaded from a binary json file (BSON).
 When the prefix could not be found in the provided locale the library tries to fallback to `en` as locale.
@@ -20,13 +20,13 @@ We offer this `phone verification and validation and more advanced features` in 
 ## Installation
 
 ```sh
-npm install @devmehq/libphonenumber-js
+npm install @devmehq/phonenumber-js
 ```
 
 or
 
 ```sh
-yarn add @devmehq/libphonenumber-js
+yarn add @devmehq/phonenumber-js
 ```
 
 ## Usage
@@ -40,7 +40,7 @@ The available methods are:
 ## Examples
 
 ```js
-import { geocoder, carrier, timezones, parsePhoneNumberFromString } from '@devmehq/libphonenumber-js'
+import { geocoder, carrier, timezones, parsePhoneNumberFromString } from '@devmehq/phonenumber-js'
 
 const fixedLineNumber = parsePhoneNumberFromString('+41431234567')
 const locationEN = geocoder(fixedLineNumber) // Zurich
