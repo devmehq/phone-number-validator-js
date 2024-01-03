@@ -22,7 +22,7 @@
 
 ✅ Check phone number carrier name
 
-✅ Check phone number geo location (city)
+✅ Check phone number geolocation (city)
 
 ✅ Check phone number timezone
 
