@@ -17,10 +17,12 @@ const codeData: Record<string, Document> = {}
  */
 function getCode(dataPath: string, nationalNumber: string) {
   try {
+    //
     if (!codeData[dataPath]) {
       const bData = readFileSync(dataPath)
       codeData[dataPath] = deserialize(bData)
     }
+    //
     const data = codeData[dataPath]
     let prefix = nationalNumber
     // Find the longest match
