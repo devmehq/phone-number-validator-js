@@ -59,7 +59,7 @@ The BSL allows use only for non-production purposes.
 
 To purchase a license for uses not authorized by BSL, please contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
 
-## Self-hosting - installation and usage instructions
+## installation and usage instructions
 
 ## Installation
 
@@ -108,4 +108,4 @@ yarn test
 ## Contributing
 Please feel free to open an issue or create a pull request and fix bugs or add features, All contributions are welcome. Thank you!
 
-## LICENSE [MIT](LICENSE.md)
+## LICENSE [Business Source License 1.1](LICENSE.md)
