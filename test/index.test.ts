@@ -3,7 +3,7 @@ import {
   geocoder,
   parsePhoneNumberFromString,
   timezones,
-} from './index'
+} from '../src'
 
 it('geocodes with default locale en', async () => {
   const phoneNr = parsePhoneNumberFromString('+41431234567')
