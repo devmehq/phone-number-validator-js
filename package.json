@@ -23,7 +23,7 @@
     "type": "git",
     "url": "https://github.com/devmehq/phone-number-validator-js"
   },
-  "license": "MIT",
+  "license": "BSL 1.1",
   "author": "DEV.ME <support@dev.me> (https://dev.me)",
   "main": "lib/index.js",
   "module": "lib/index.es.js",
