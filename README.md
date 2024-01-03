@@ -43,6 +43,7 @@
 ## API / Cloud Hosted Service
 We offer this `phone verification and validation and more advanced features` in our Scalable Cloud API Service Offering - You could try it here [Phone Number Verification](https://dev.me/products/phone)
 
+---
 
 ## License
 
@@ -58,6 +59,8 @@ The BSL allows use only for non-production purposes.
 | Forking phone-number-validator-js for any production purposes | **Yes** |
 
 To purchase a license for uses not authorized by BSL, please contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
+
+---
 
 ## installation and usage instructions
 
