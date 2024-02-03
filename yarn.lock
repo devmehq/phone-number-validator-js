@@ -1878,9 +1878,9 @@ leven@^3.1.0:
   integrity sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==
 
 libphonenumber-js@^1.10.54:
-  version "1.10.54"
-  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.54.tgz#8dfba112f49d1b9c2a160e55f9697f22e50f0841"
-  integrity sha512-P+38dUgJsmh0gzoRDoM4F5jLbyfztkU6PY6eSK6S5HwTi/LPvnwXqVCQZlAy1FxZ5c48q25QhxGQ0pq+WQcSlQ==
+  version "1.10.55"
+  resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.55.tgz#ec864e369bf7babde02021d06b5f2433d7e9c78e"
+  integrity sha512-MrTg2JFLscgmTY6/oT9vopYETlgUls/FU6OaeeamGwk4LFxjIgOUML/ZSZICgR0LPYXaonVJo40lzMvaaTJlQA==
 
 lines-and-columns@^1.1.6:
   version "1.2.4"
