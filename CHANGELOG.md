@@ -1,5 +1,12 @@
 # Change Log
 
+## v1.2.13
+- Update dependencies
+- Refactor tests
+
+## v1.2.12
+- Update dependencies
+
 ## v1.2.11
 - Update license from MIT to BSL-1.1
 - Update dependencies
