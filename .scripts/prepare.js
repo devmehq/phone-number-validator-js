@@ -16,7 +16,7 @@ const BSON = require('bson')
 
 const isDir = (source) => lstatSync(source).isDirectory()
 
-const prepareLocale = async (localePath, locale, type) => {
+async function prepareLocale(localePath, locale, type) {
   const fileRe = /[0-9]+\.txt/
   const files = readdirSync(localePath).filter((source) => fileRe.test(source))
   const lineRe = /^([0-9]+)\|(.*)$/
@@ -48,7 +48,7 @@ const prepareLocale = async (localePath, locale, type) => {
   }
 }
 
-const preparePath = async (dataPath, type) => {
+async function preparePath(dataPath, type) {
   const locales = readdirSync(dataPath).filter((source) =>
     isDir(join(dataPath, source))
   )
@@ -63,7 +63,7 @@ const preparePath = async (dataPath, type) => {
   return { locales }
 }
 
-const prepareTimezones = async () => {
+async function prepareTimezones() {
   const lineRe = /^([0-9]+)\|(.*)$/
   let data = {}
   const file = join(
@@ -119,4 +119,9 @@ const prepare = async () => {
   console.log('Creating types...')
   writeFileSync(join(__dirname, '/../src/locales.ts'), generatedTypes)
 }
+
 prepare()
+  .then()
+  .catch((e) => {
+    console.error(`error`, e)
+  })
