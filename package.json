@@ -1,6 +1,6 @@
 {
   "name": "@devmehq/phone-number-validator-js",
-  "version": "1.2.12",
+  "version": "1.2.13",
   "description": "Verify phone number, validate format, checking carrier name, geo and timezone infos.",
   "keywords": [
     "telephone",
@@ -34,9 +34,9 @@
   ],
   "scripts": {
     "build": "rimraf lib && rollup -c --bundleConfigAsCjs",
-    "preparemetadata": "rimraf resources && node tools/prepare.js && rimraf resources/libphonenumber",
+    "preparemetadata": "rimraf resources && node .scripts/prepare.js && rimraf resources/libphonenumber",
     "prepublishOnly": "yarn build",
-    "prettier": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "prettier": "prettier --write \\\"src/**/*.ts\\\" \\\"__tests__/**/*.ts\\\"",
     "test": "jest",
     "watch": "rimraf lib && rollup -cw"
   },
