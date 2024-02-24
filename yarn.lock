@@ -745,7 +745,7 @@
   dependencies:
     undici-types "~5.26.4"
 
-"@types/node@^20.11.17":
+"@types/node@^20.11.20":
   version "20.11.20"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.11.20.tgz#f0a2aee575215149a62784210ad88b3a34843659"
   integrity sha512-7/rR21OS+fq8IyHTgtLkDK949uzsa6n8BkziAKtPVpugIkO6D+/ooXMvzXxDnZrmtXVfjb1bKQafYpb8s89LOg==
@@ -1884,7 +1884,7 @@ leven@^3.1.0:
   resolved "https://registry.yarnpkg.com/leven/-/leven-3.1.0.tgz#77891de834064cccba82ae7842bb6b14a13ed7f2"
   integrity sha512-qsda+H8jTaUaN/x5vzW2rzc+8Rw4TAQ/4KjB46IwK5VH+IlVeeeje/EoZRpiXvIqjFgK84QffqPztGI3VBLG1A==
 
-libphonenumber-js@^1.10.55:
+libphonenumber-js@^1.10.57:
   version "1.10.57"
   resolved "https://registry.yarnpkg.com/libphonenumber-js/-/libphonenumber-js-1.10.57.tgz#4a8174014c758b8ffd865e06a43c3885706f7a9c"
   integrity sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==
@@ -2208,7 +2208,7 @@ rollup-plugin-typescript2@^0.36.0:
     semver "^7.5.4"
     tslib "^2.6.2"
 
-rollup@^4.10.0:
+rollup@^4.12.0:
   version "4.12.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-4.12.0.tgz#0b6d1e5f3d46bbcf244deec41a7421dc54cc45b5"
   integrity sha512-wz66wn4t1OHIJw3+XU7mJJQV/2NAfw5OAk6G6Hoo3zcvz/XOfQ52Vgi+AN4Uxoxi0KBBwk2g8zPrTDA4btSB/Q==
