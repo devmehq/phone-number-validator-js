@@ -1,5 +1,8 @@
 # Change Log
 
+## v1.2.14
+- Update dependencies
+
 ## v1.2.13
 - Update dependencies
 - Refactor tests
