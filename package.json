@@ -21,7 +21,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/devmehq/phone-number-validator-js"
+    "url": "git@github.com:devmehq/phone-number-validator-js.git"
   },
   "license": "BSL 1.1",
   "author": "DEV.ME <support@dev.me> (https://dev.me)",
