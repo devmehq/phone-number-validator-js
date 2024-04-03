@@ -51,6 +51,5 @@ jobs:
 
       - name: Release
         run: |
-          npm i -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          npm link release-it @release-it/conventional-changelog @release-it/keep-a-changelog
+          yarn global -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
           node release.mjs
