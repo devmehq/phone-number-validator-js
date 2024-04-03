@@ -23,9 +23,6 @@ const config = {
         ],
       },
     },
-    '@release-it/keep-a-changelog': {
-      filename: 'CHANGELOG.md',
-    },
   },
 }
 
