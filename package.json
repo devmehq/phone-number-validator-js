@@ -1,6 +1,6 @@
 {
   "name": "@devmehq/phone-number-validator-js",
-  "version": "1.2.14",
+  "version": "1.2.15",
   "description": "Verify phone number, validate format, checking carrier name, geo and timezone infos.",
   "keywords": [
     "telephone",
@@ -52,7 +52,7 @@
     "jest": "^29.7.0",
     "prettier": "^3.2.5",
     "rimraf": "^5.0.5",
-    "rollup": "^4.13.2",
+    "rollup": "^4.14.0",
     "rollup-plugin-typescript2": "^0.36.0",
     "shelljs": "^0.8.5",
     "ts-jest": "^29.1.2",

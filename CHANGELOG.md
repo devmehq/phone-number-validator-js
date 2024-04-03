@@ -1,4 +1,4 @@
-# Change Log
+# Changelog
 
 ## v1.2.15
 - Update dependencies

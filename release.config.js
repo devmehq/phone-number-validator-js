@@ -48,6 +48,7 @@ module.exports = {
         ],
       },
     ],
+    ['@semantic-release/release-notes-generator'],
     // https://github.com/semantic-release/npm
     ['@semantic-release/npm'],
     // https://github.com/semantic-release/github
