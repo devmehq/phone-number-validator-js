@@ -49,16 +49,8 @@ jobs:
           yarn preparemetadata
           yarn test
 
-      - name: Initialize Git user
-        run: |
-          git config --global user.email "support@dev.me"
-          git config --global user.name "DEV.ME"
-
-      - name: Initialise the NPM config
-        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
-
       - name: Release
         run: |
           npm i -g yarn-add-no-save
           yarn-add-no-save release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          npx release-it
+          npx release-it --ci
