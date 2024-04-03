@@ -51,5 +51,5 @@ jobs:
 
       - name: Release
         run: |
-          npm install -g  @release-it/conventional-changelog @release-it/keep-a-changelog
+          npm install --no-save release-it @release-it/conventional-changelog @release-it/keep-a-changelog
           npx release-it
