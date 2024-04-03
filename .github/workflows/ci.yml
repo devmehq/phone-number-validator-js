@@ -57,5 +57,5 @@ jobs:
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
-          yarn global -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
+          yarn global add release-it @release-it/conventional-changelog @release-it/keep-a-changelog
           node release.mjs
