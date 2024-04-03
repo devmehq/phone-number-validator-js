@@ -57,5 +57,5 @@ jobs:
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
-          yarn add --no-save release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          node release.mjs
+          npm i -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
+          NODE_PATH=$(npm root -g) node release.mjs
