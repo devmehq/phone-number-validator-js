@@ -65,6 +65,5 @@ jobs:
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
-          npm i -g yarn-add-no-save
-          yarn-add-no-save release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          npx release-it --ci
+          npm i -g semantic-release @semantic-release/git @semantic-release/github conventional-changelog-conventionalcommits
+          npx semantic-release --no-ci --debug
