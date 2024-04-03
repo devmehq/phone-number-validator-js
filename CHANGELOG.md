@@ -1,7 +1,5 @@
 # Changelog
 
-## [Unreleased]
-
 ## v1.2.15
 - Update dependencies
 
