@@ -49,6 +49,11 @@ jobs:
           yarn preparemetadata
           yarn test
 
+      - name: Initialise the NPM config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Release
         run: |
           npm i -g yarn-add-no-save

@@ -54,6 +54,11 @@ jobs:
           yarn preparemetadata
           yarn test
 
+      - name: Initialise the NPM config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
