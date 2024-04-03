@@ -58,4 +58,9 @@ jobs:
         if: github.ref == 'refs/heads/develop'
         run: |
           npm i -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          NODE_PATH=$(npm root -g) node release.mjs
+
+      - name: Release
+        if: github.ref == 'refs/heads/develop'
+        run: |
+          echo $NODE_PATH
+          node release.mjs
