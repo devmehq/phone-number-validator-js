@@ -51,5 +51,6 @@ jobs:
 
       - name: Release
         run: |
-          yarn add --no-lockfile release-it @release-it/conventional-changelog @release-it/keep-a-changelog
+          npm i -g yarn-add-no-save
+          yarn-add-no-save release-it @release-it/conventional-changelog @release-it/keep-a-changelog
           npx release-it
