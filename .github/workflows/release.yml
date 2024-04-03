@@ -51,5 +51,4 @@ jobs:
 
       - name: Release
         run: |
-          yarn global add release-it @release-it/conventional-changelog @release-it/keep-a-changelog
-          node release.mjs
+          npx release-it
