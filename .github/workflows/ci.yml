@@ -58,5 +58,5 @@ jobs:
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
-          npm i -g semantic-release @semantic-release/git @semantic-release/github conventional-changelog-conventionalcommits
-          npx semantic-release --no-ci --debug
+          npm i -g release-it @release-it/conventional-changelog @release-it/keep-a-changelog
+          node release.mjs
