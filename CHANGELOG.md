@@ -31,4 +31,4 @@
 - Release to npm
 
 
-## [Unreleased]
+## [1.3.3-0] - 2025-02-10
