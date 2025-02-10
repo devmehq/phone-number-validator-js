@@ -1,4 +1,5 @@
 import release from 'release-it'
+
 const branch = process.env.BRANCH || process.env.CI_REF_NAME || ''
 const branchSlug = branch.replace(/\//g, '-')
 const branchPrefix = branch.split('/')[0]
@@ -20,9 +21,6 @@ const config = {
           { message: '**', release: 'patch' },
         ],
       },
-    },
-    '@release-it/keep-a-changelog': {
-      filename: 'CHANGELOG.md',
     },
   },
 }

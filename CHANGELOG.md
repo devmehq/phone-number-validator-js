@@ -30,5 +30,8 @@
 - Update dependencies
 - Release to npm
 
+## v1.3.3
+- Update dependencies
 
-## [1.3.3-0] - 2025-02-10
+## v1.3.4
+- Update package.json
