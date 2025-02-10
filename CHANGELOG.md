@@ -35,3 +35,6 @@
 
 ## v1.3.4
 - Update package.json
+
+## v1.3.5
+- Fix version
