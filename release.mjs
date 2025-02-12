@@ -4,6 +4,9 @@ const branch = process.env.BRANCH || process.env.CI_REF_NAME || ''
 const branchSlug = branch.replace(/\//g, '-')
 const branchPrefix = branch.split('/')[0]
 
+/**
+ * @type {import('release-it').Config}
+ */
 const config = {
   isPreRelease: branch !== 'master',
   preRelease: branch !== 'master',
@@ -24,8 +27,6 @@ const config = {
     },
   },
 }
-
-console.debug('config', config)
 
 release(config).then((output) => {
   console.debug('output', output)
