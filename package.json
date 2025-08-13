@@ -46,7 +46,7 @@
   },
   "devDependencies": {
     "@release-it/conventional-changelog": "^10.0.0",
-    "@release-it/keep-a-changelog": "^6.0.0",
+    "@release-it/keep-a-changelog": "^7.0.0",
     "@types/bson": "^4.2.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^22.13.10",
