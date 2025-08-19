@@ -23,8 +23,12 @@ it('maps a carrier correctly', async () => {
   const phoneNr = parsePhoneNumberFromString('01701234567', 'DE')
   const carrierEN = carrier(phoneNr)
   expect(carrierEN).toEqual('T-Mobile')
-  // There should not be an arabic mapping for german carrier numbers (I guess?)
+  // Test fallback to English when locale not available
+  // Temporarily suppress console.error for this test
+  const originalError = console.error
+  console.error = jest.fn()
   const carrierAR = carrier(phoneNr, 'ar')
+  console.error = originalError
   expect(carrierAR).toEqual('T-Mobile')
 })
 

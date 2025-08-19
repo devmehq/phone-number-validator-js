@@ -5,6 +5,7 @@ on:
   push:
     paths:
       - 'src/**'
+      - '__tests__/**'
       - 'package.json'
       - 'yarn.lock'
       - 'release.config.js'
@@ -36,10 +37,9 @@ jobs:
     steps:
       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 30
-          persist-credentials: false
 
       - uses: FranzDiebold/github-env-vars-action@v2
 
@@ -59,4 +59,7 @@ jobs:
       - name: Release
         if: github.ref == 'refs/heads/develop'
         run: |
+          git config --global user.email "support@dev.me"
+          git config --global user.name "Dev.me Team"
+          npm set //registry.npmjs.org/:_authToken $NPM_TOKEN
           node release.mjs

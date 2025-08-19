@@ -28,6 +28,12 @@
 
 ✅ Check phone number country code
 
+✅ High-performance LRU caching with configurable size
+
+✅ Comprehensive error handling and input validation
+
+✅ TypeScript support with strict type safety
+
 
 ## Use cases
 - Increase delivery rate of SMS campaigns by removing invalid phone numbers
@@ -58,7 +64,7 @@ The BSL allows use only for non-production purposes.
 | Using phone-number-validator-js to build software that is provided as a service (SaaS) | **Yes** |
 | Forking phone-number-validator-js for any production purposes | **Yes** |
 
-To purchase a license for uses not authorized by BSL, please contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
+To purchase a license for uses not authorized by BSL, please visit [https://dev.me/license/phone-number-validator](https://dev.me/license/phone-number-validator) or contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
 
 ---
 
@@ -78,13 +84,21 @@ yarn add @devmehq/phone-number-validator-js
 
 ## Usage
 
-The available methods are:
+### Core Methods
 
 - `geocoder(phonenumber: PhoneNumber, locale?: GeocoderLocale = 'en'): string | null` - Resolved to the geocode or null if no geocode could be found (e.g. for mobile numbers)
 - `carrier(phonenumber: PhoneNumber, locale?: CarrierLocale = 'en'): string | null` - Resolves to the carrier or null if non could be found (e.g. for fixed line numbers)
 - `timezones(phonenumber: PhoneNumber): Array<string> | null` - Resolved to an array of timezones or null if non where found.
 
+### Cache Management Methods
+
+- `clearCache(): void` - Clear all cached data
+- `getCacheSize(): number` - Get current cache size
+- `setCacheSize(size: number): void` - Set maximum cache size (default: 100)
+
 ## Examples
+
+### Basic Usage
 
 ```js
 import { geocoder, carrier, timezones, parsePhoneNumberFromString } from '@devmehq/phone-number-validator-js'
@@ -102,10 +116,101 @@ const fixedLineNumber2 = parsePhoneNumberFromString('+49301234567')
 const tzones = timezones(fixedLineNumber2) // ['Europe/Berlin']
 ```
 
+### Cache Management
+
+```js
+import { 
+  clearCache, 
+  getCacheSize, 
+  setCacheSize,
+  geocoder,
+  parsePhoneNumberFromString 
+} from '@devmehq/phone-number-validator-js'
+
+// Adjust cache size based on your needs
+setCacheSize(50) // Limit to 50 entries
+
+// Monitor cache usage
+console.log(`Cache size: ${getCacheSize()}`)
+
+// Perform lookups
+const phoneNumber = parsePhoneNumberFromString('+41431234567')
+const location = geocoder(phoneNumber)
+
+// Clear cache when needed
+if (getCacheSize() > 40) {
+  clearCache()
+}
+
+// For long-running processes, you might want to clear cache periodically
+setInterval(() => {
+  clearCache()
+}, 3600000) // Clear every hour
+```
+
+### Error Handling
+
+```js
+import { geocoder, parsePhoneNumberFromString } from '@devmehq/phone-number-validator-js'
+
+// Invalid phone numbers return null
+const invalid = parsePhoneNumberFromString('invalid')
+const result = geocoder(invalid) // null
+
+// Undefined/null inputs are handled gracefully
+const result2 = geocoder(undefined) // null
+const result3 = geocoder(null) // null
+```
+
+### TypeScript Usage
+
+```typescript
+import { 
+  geocoder, 
+  carrier, 
+  timezones,
+  parsePhoneNumberFromString,
+  PhoneNumber,
+  GeocoderLocale,
+  CarrierLocale
+} from '@devmehq/phone-number-validator-js'
+
+// Type-safe locale usage
+const phoneNumber: PhoneNumber | undefined = parsePhoneNumberFromString('+41431234567')
+const locale: GeocoderLocale = 'de'
+
+const location: string | null = geocoder(phoneNumber, locale)
+const carrierInfo: string | null = carrier(phoneNumber)
+const tzs: string[] | null = timezones(phoneNumber)
+
+// Cache management with types
+import { setCacheSize, getCacheSize, clearCache } from '@devmehq/phone-number-validator-js'
+
+const size: number = getCacheSize()
+setCacheSize(50)
+clearCache()
+```
+
+
+## Performance
+
+The library uses [tiny-lru](https://www.npmjs.com/package/tiny-lru) for high-performance caching:
+
+- **O(1) complexity** for cache operations (get, set, delete)
+- **LRU eviction** when cache reaches the size limit
+- **Configurable cache size** to balance memory usage and performance
+- **<1ms lookups** after initial data load
 
 ## Testing
+
 ```bash
 yarn test
+```
+
+Run tests in production mode (suppresses debug logs):
+
+```bash
+NODE_ENV=production yarn test
 ```
 
 ## Contributing

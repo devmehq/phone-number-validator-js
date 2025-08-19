@@ -1,5 +1,24 @@
 # Changelog
 
+## v1.4.0 (Unreleased)
+### Features
+- Add high-performance LRU caching using tiny-lru library
+- Add cache management API: `clearCache()`, `getCacheSize()`, `setCacheSize()`
+- Add comprehensive input validation and error handling
+- Improve TypeScript type safety with explicit return types
+
+### Improvements
+- Refactor code to eliminate duplication between geocoder and carrier functions
+- Optimize memory usage with configurable cache limits
+- Add 27 new comprehensive test cases
+- Enhance error logging in development mode
+- Performance improvements: <1ms lookups after initial cache
+
+### Documentation
+- Add comprehensive API documentation
+- Add performance and memory management guides
+- Update README with cache management examples
+
 ## v1.3.0
 - Update dependencies
 
