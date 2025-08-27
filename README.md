@@ -51,23 +51,6 @@ We offer this `phone verification and validation and more advanced features` in 
 
 ---
 
-## License
-
-phone-number-validator-js licensed under [Business Source License 1.1](LICENSE).
-The BSL allows use only for non-production purposes.
-
-| Use Case | Is a commercial license required?|
-|----------|-----------|
-| Exploring phone-number-validator-js for your own research, hobbies, and testing purposes | **No** |
-| Using phone-number-validator-js to build a proof-of-concept application | **No** |
-| Using phone-number-validator-js to build revenue-generating applications | **Yes** |
-| Using phone-number-validator-js to build software that is provided as a service (SaaS) | **Yes** |
-| Forking phone-number-validator-js for any production purposes | **Yes** |
-
-To purchase a license for uses not authorized by BSL, please visit [https://dev.me/license/phone-number-validator](https://dev.me/license/phone-number-validator) or contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
-
----
-
 ## installation and usage instructions
 
 ## Installation
@@ -216,4 +199,25 @@ NODE_ENV=production yarn test
 ## Contributing
 Please feel free to open an issue or create a pull request and fix bugs or add features, All contributions are welcome. Thank you!
 
-## LICENSE [Business Source License 1.1](LICENSE.md)
+## Support
+For issues, questions, or commercial licensing:
+
+🐛 [Open an Issue](https://github.com/devmehq/phone-number-validator-js/issues)
+📧 [Email Support](mailto:support@dev.me)
+📄 [Commercial License](https://dev.me/license/phone-number-validator)
+🌐 [Visit Dev.me](https://dev.me)
+
+## LICENSE
+Business Source License 1.1 - see [LICENSE](LICENSE.md) file for details.
+
+The BSL allows use only for non-production purposes. Here's when you need a commercial license:
+
+| Use Case | Is a commercial license required? |
+|----------|-----------|
+| Exploring phone-number-validator-js for your own research, hobbies, and testing purposes | **No** |
+| Using phone-number-validator-js to build a proof-of-concept application | **No** |
+| Using phone-number-validator-js to build revenue-generating applications | **Yes** |
+| Using phone-number-validator-js to build software that is provided as a service (SaaS) | **Yes** |
+| Forking phone-number-validator-js for any production purposes | **Yes** |
+
+To purchase a license for uses not authorized by BSL, please visit [https://dev.me/license/phone-number-validator](https://dev.me/license/phone-number-validator) or contact us at [sales@dev.me](mailto:sales@dev.me?subject=Interested%20in%20phone-number-validator-js%20commercial%20license).
