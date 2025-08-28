@@ -2,7 +2,7 @@
 
 [![NPM version](https://badgen.net/npm/v/@devmehq/phone-number-validator-js)](https://npm.im/@devmehq/phone-number-validator-js)
 [![Build Status](https://github.com/devmehq/phone-number-validator-js/workflows/CI/badge.svg)](https://github.com/devmehq/phone-number-validator-js/actions)
-[![Downloads](https://img.shields.io/npm/dm/@devmehq/phone-number-validator-js.svg)](https://www.npmjs.com/package/phone-number-validator-js)
+[![Downloads](https://img.shields.io/npm/dm/@devmehq/phone-number-validator-js.svg)](https://www.npmjs.com/package/@devmehq/phone-number-validator-js)
 [![UNPKG](https://img.shields.io/badge/UNPKG-OK-179BD7.svg)](https://unpkg.com/browse/@devmehq/phone-number-validator-js@latest/)
 
 ### Verify phone number, validate format, checking carrier name, geo and timezone infos.
@@ -33,6 +33,8 @@
 ✅ Comprehensive error handling and input validation
 
 ✅ TypeScript support with strict type safety
+
+✅ Serverless architecture support (AWS Lambda, Cloudflare Workers, Vercel Edge, Deno)
 
 
 ## Use cases
@@ -173,6 +175,154 @@ const size: number = getCacheSize()
 setCacheSize(50)
 clearCache()
 ```
+
+## Serverless Support
+
+The library provides a lightweight serverless version that's optimized for edge environments like AWS Lambda, Cloudflare Workers, Vercel Edge Functions, and Deno Deploy.
+
+### Features
+- **244KB bundle size** (minified) - fits well under most size limits
+- **No Node.js dependencies** - runs in any JavaScript environment
+- **Resource loader pattern** - load data from your preferred storage (S3, R2, KV, etc.)
+- **Same API** - drop-in replacement for the standard version
+
+### Installation for Serverless
+
+```js
+// Use the serverless entry point
+import { 
+  setResourceLoader,
+  parsePhoneNumber,
+  geocoder,
+  carrier,
+  timezones
+} from '@devmehq/phone-number-validator-js/serverless'
+```
+
+### Serverless Examples
+
+#### AWS Lambda
+```js
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3'
+import { setResourceLoader, geocoder, parsePhoneNumber } from '@devmehq/phone-number-validator-js/serverless'
+
+const s3 = new S3Client()
+
+// Set up resource loader
+setResourceLoader({
+  async loadResource(path) {
+    try {
+      const command = new GetObjectCommand({
+        Bucket: process.env.RESOURCES_BUCKET,
+        Key: `phone-validator/${path}`
+      })
+      const response = await s3.send(command)
+      return new Uint8Array(await response.Body.transformToByteArray())
+    } catch {
+      return null
+    }
+  }
+})
+
+// Lambda handler
+export async function handler(event) {
+  const phoneNumber = parsePhoneNumber(event.phone, event.country)
+  const location = await geocoder(phoneNumber)
+  
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ location })
+  }
+}
+```
+
+#### Cloudflare Workers
+```js
+import { setResourceLoader, carrier, parsePhoneNumber } from '@devmehq/phone-number-validator-js/serverless'
+
+// Use R2 storage for resources
+setResourceLoader({
+  async loadResource(path) {
+    const object = await env.RESOURCES_BUCKET.get(`phone-validator/${path}`)
+    if (!object) return null
+    const buffer = await object.arrayBuffer()
+    return new Uint8Array(buffer)
+  }
+})
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url)
+    const phone = url.searchParams.get('phone')
+    
+    const phoneNumber = parsePhoneNumber(phone)
+    const carrierInfo = await carrier(phoneNumber)
+    
+    return Response.json({ carrier: carrierInfo })
+  }
+}
+```
+
+#### Vercel Edge Functions
+```js
+import { setResourceLoader, timezones, parsePhoneNumber } from '@devmehq/phone-number-validator-js/serverless'
+
+// Use Vercel Blob storage
+setResourceLoader({
+  async loadResource(path) {
+    const response = await fetch(`${process.env.BLOB_URL}/phone-validator/${path}`)
+    if (!response.ok) return null
+    const buffer = await response.arrayBuffer()
+    return new Uint8Array(buffer)
+  }
+})
+
+export const config = { runtime: 'edge' }
+
+export default async function handler(req) {
+  const { phone } = await req.json()
+  const phoneNumber = parsePhoneNumber(phone)
+  const tzs = await timezones(phoneNumber)
+  
+  return Response.json({ timezones: tzs })
+}
+```
+
+### Resource Files
+
+The serverless version requires resource files to be deployed separately. Download them from the npm package:
+
+```bash
+# Extract resource files from the npm package
+npm pack @devmehq/phone-number-validator-js
+tar -xf devmehq-phone-number-validator-js-*.tgz
+cp -r package/resources/* your-storage-location/
+```
+
+Then upload to your preferred storage (S3, R2, Blob storage, etc.) and configure the resource loader accordingly.
+
+### Performance Tips
+
+1. **Use caching**: The library includes built-in LRU caching
+2. **Deploy resources to the same region** as your functions for lower latency
+3. **Consider using CDN** for resource files if serving globally
+4. **Use sync loader** when possible for better performance:
+
+```js
+// Sync loader for environments that support it
+setResourceLoader({
+  loadResourceSync(path) {
+    // Synchronous loading implementation
+    return loadFromCacheSync(path)
+  },
+  async loadResource(path) {
+    // Async fallback
+    return loadFromCacheAsync(path)
+  }
+})
+```
+
+For detailed serverless deployment guides, see [SERVERLESS.md](./SERVERLESS.md).
 
 
 ## Performance

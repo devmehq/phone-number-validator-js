@@ -1,9 +1,4 @@
-import {
-  carrier,
-  geocoder,
-  parsePhoneNumberFromString,
-  timezones,
-} from '../src'
+import { carrier, geocoder, parsePhoneNumberFromString, timezones } from '../src'
 
 it('geocodes with default locale en', async () => {
   const phoneNr = parsePhoneNumberFromString('+41431234567')

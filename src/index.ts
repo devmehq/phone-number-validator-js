@@ -1,10 +1,10 @@
 export * from 'libphonenumber-js'
-import { PhoneNumber } from 'libphonenumber-js'
-import { CarrierLocale, GeocoderLocale } from './locales'
-import { readFileSync } from 'fs'
-import { deserialize, Document } from 'bson'
-import { join } from 'path'
-import { lru, LRU } from 'tiny-lru'
+import type { PhoneNumber } from 'libphonenumber-js'
+import type { CarrierLocale, GeocoderLocale } from './locales'
+import { readFileSync } from 'node:fs'
+import { deserialize, type Document } from 'bson'
+import { join } from 'node:path'
+import { lru, type LRU } from 'tiny-lru'
 
 const DEFAULT_CACHE_SIZE = 100
 let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
@@ -25,13 +25,13 @@ function getCode(dataPath: string, nationalNumber: string): string | null {
   try {
     // Use tiny-lru cache
     let data = codeDataCache.get(dataPath)
-    
+
     if (!data) {
       const bData = readFileSync(dataPath)
       data = deserialize(bData)
       codeDataCache.set(dataPath, data)
     }
-    
+
     let prefix = nationalNumber
     // Find the longest match
     while (prefix.length > 0) {
@@ -63,14 +63,14 @@ function getLocalizedData(
   if (!phonenumber) {
     return null
   }
-  
+
   const nationalNumber = phonenumber.nationalNumber?.toString()
   const countryCallingCode = phonenumber.countryCallingCode?.toString()
-  
+
   if (!nationalNumber || !countryCallingCode) {
     return null
   }
-  
+
   // Try with requested locale
   let dataPath = join(
     __dirname,
@@ -79,12 +79,12 @@ function getLocalizedData(
     locale,
     `${countryCallingCode}.bson`
   )
-  
-  let code = getCode(dataPath, nationalNumber)
+
+  const code = getCode(dataPath, nationalNumber)
   if (code) {
     return code
   }
-  
+
   // Fallback to default locale if different
   if (locale !== fallbackLocale) {
     dataPath = join(
@@ -96,7 +96,7 @@ function getLocalizedData(
     )
     return getCode(dataPath, nationalNumber)
   }
-  
+
   return null
 }
 
@@ -138,20 +138,20 @@ export function timezones(phonenumber: PhoneNumber | undefined): string[] | null
   if (!phonenumber || !phonenumber.number) {
     return null
   }
-  
+
   let nr = phonenumber.number.toString()
   if (!nr) {
     return null
   }
-  
+
   nr = nr.replace(/^\+/, '')
   const dataPath = join(__dirname, '../resources/timezones.bson')
   const zones = getCode(dataPath, nr)
-  
+
   if (typeof zones === 'string' && zones.length > 0) {
-    return zones.split('&').filter(zone => zone.length > 0)
+    return zones.split('&').filter((zone) => zone.length > 0)
   }
-  
+
   return null
 }
 
@@ -178,7 +178,7 @@ export function setCacheSize(size: number): void {
   // Create a new cache with the new size and transfer existing data
   const oldCache = codeDataCache
   codeDataCache = lru<Document>(size)
-  
+
   // Transfer entries from old cache to new cache (most recent first)
   const entries = oldCache.entries()
   entries.reverse() // Start with most recent

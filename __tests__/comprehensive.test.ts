@@ -69,7 +69,7 @@ describe('Comprehensive Phone Number Validation Tests', () => {
       const phoneNr = parsePhoneNumberFromString('invalid_number')
       const location = geocoder(phoneNr)
       expect(location).toBeNull()
-      
+
       // Also test with undefined
       expect(geocoder(undefined)).toBeNull()
     })
@@ -142,13 +142,13 @@ describe('Comprehensive Phone Number Validation Tests', () => {
   describe('Cache Management', () => {
     it('should cache loaded data files', () => {
       expect(getCacheSize()).toBe(0)
-      
+
       const phoneNr = parsePhoneNumberFromString('+41431234567')
       geocoder(phoneNr)
-      
+
       const cacheSize1 = getCacheSize()
       expect(cacheSize1).toBeGreaterThan(0)
-      
+
       // Same lookup should use cache
       geocoder(phoneNr)
       expect(getCacheSize()).toBe(cacheSize1)
@@ -157,23 +157,23 @@ describe('Comprehensive Phone Number Validation Tests', () => {
     it('should clear cache when requested', () => {
       const phoneNr = parsePhoneNumberFromString('+41431234567')
       geocoder(phoneNr)
-      
+
       expect(getCacheSize()).toBeGreaterThan(0)
-      
+
       clearCache()
       expect(getCacheSize()).toBe(0)
     })
 
     it('should handle cache for different resource types', () => {
       const phoneNr = parsePhoneNumberFromString('+8619912345678')
-      
+
       geocoder(phoneNr)
       const size1 = getCacheSize()
-      
+
       carrier(phoneNr)
       const size2 = getCacheSize()
       expect(size2).toBeGreaterThan(size1)
-      
+
       timezones(phoneNr)
       const size3 = getCacheSize()
       expect(size3).toBeGreaterThan(size2)
@@ -182,22 +182,22 @@ describe('Comprehensive Phone Number Validation Tests', () => {
     it('should allow cache size configuration', () => {
       // Set a smaller cache size
       setCacheSize(2)
-      
+
       // Load multiple different resources
       const phoneNr1 = parsePhoneNumberFromString('+41431234567')
       const phoneNr2 = parsePhoneNumberFromString('+8619912345678')
       const phoneNr3 = parsePhoneNumberFromString('+49301234567')
-      
+
       geocoder(phoneNr1)
       expect(getCacheSize()).toBe(1)
-      
+
       geocoder(phoneNr2)
       expect(getCacheSize()).toBe(2)
-      
+
       // This should evict the oldest entry
       geocoder(phoneNr3)
       expect(getCacheSize()).toBeLessThanOrEqual(2)
-      
+
       // Reset to default
       setCacheSize(100)
     })
@@ -218,15 +218,13 @@ describe('Comprehensive Phone Number Validation Tests', () => {
     })
 
     it('should handle numbers in different formats', () => {
-      const formats = [
-        '+41431234567',
-        '0041431234567',
-        '+41 43 123 45 67',
-        '043 123 45 67',
-      ]
-      
-      formats.forEach(format => {
-        const phoneNr = parsePhoneNumberFromString(format, format.startsWith('0') && !format.startsWith('00') ? 'CH' : undefined)
+      const formats = ['+41431234567', '0041431234567', '+41 43 123 45 67', '043 123 45 67']
+
+      formats.forEach((format) => {
+        const phoneNr = parsePhoneNumberFromString(
+          format,
+          format.startsWith('0') && !format.startsWith('00') ? 'CH' : undefined
+        )
         if (phoneNr && phoneNr.isValid()) {
           const location = geocoder(phoneNr)
           expect(location).toBeTruthy()
@@ -235,15 +233,10 @@ describe('Comprehensive Phone Number Validation Tests', () => {
     })
 
     it('should handle concurrent lookups', async () => {
-      const numbers = [
-        '+41431234567',
-        '+12124567890',
-        '+8619912345678',
-        '+49301234567',
-      ]
-      
+      const numbers = ['+41431234567', '+12124567890', '+8619912345678', '+49301234567']
+
       const results = await Promise.all(
-        numbers.map(async num => {
+        numbers.map(async (num) => {
           const phoneNr = parsePhoneNumberFromString(num)
           return {
             geo: geocoder(phoneNr),
@@ -252,8 +245,8 @@ describe('Comprehensive Phone Number Validation Tests', () => {
           }
         })
       )
-      
-      results.forEach(result => {
+
+      results.forEach((result) => {
         expect(result).toBeDefined()
       })
     })
@@ -262,11 +255,11 @@ describe('Comprehensive Phone Number Validation Tests', () => {
   describe('Locale Fallback Behavior', () => {
     it('should fallback correctly for geocoder', () => {
       const phoneNr = parsePhoneNumberFromString('+41431234567')
-      
+
       // Test with supported locale
       const supportedResult = geocoder(phoneNr, 'de')
       expect(supportedResult).toBeTruthy()
-      
+
       // Test with unsupported locale (should fallback to en)
       const unsupportedResult = geocoder(phoneNr, 'en')
       expect(unsupportedResult).toBeTruthy()
@@ -274,11 +267,11 @@ describe('Comprehensive Phone Number Validation Tests', () => {
 
     it('should fallback correctly for carrier', () => {
       const phoneNr = parsePhoneNumberFromString('+8619912345678')
-      
+
       // Test with supported locale
       const supportedResult = carrier(phoneNr, 'zh')
       expect(supportedResult).toBeTruthy()
-      
+
       // Test with fallback to English
       const englishResult = carrier(phoneNr, 'en')
       expect(englishResult).toBeTruthy()
@@ -289,17 +282,17 @@ describe('Comprehensive Phone Number Validation Tests', () => {
     it('should handle multiple lookups efficiently', () => {
       const startTime = Date.now()
       const phoneNr = parsePhoneNumberFromString('+41431234567')
-      
+
       // Perform 100 lookups
       for (let i = 0; i < 100; i++) {
         geocoder(phoneNr)
         carrier(phoneNr)
         timezones(phoneNr)
       }
-      
+
       const endTime = Date.now()
       const duration = endTime - startTime
-      
+
       // Should complete in reasonable time (< 1 second for 300 operations)
       expect(duration).toBeLessThan(1000)
     })
