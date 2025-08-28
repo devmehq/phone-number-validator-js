@@ -54,7 +54,7 @@
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
     "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
-    "prepublishOnly": "yarn build:all",
+    "prepublishOnly": "yarn build",
     "test": "jest",
     "watch": "rm -rf lib && rollup -cw rollup.config.cjs",
     "watch:serverless": "rollup -cw rollup.config.serverless.cjs"
