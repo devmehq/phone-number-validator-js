@@ -1,8 +1,8 @@
-import typescript from '@rollup/plugin-typescript'
-import resolve from '@rollup/plugin-node-resolve'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
-import terser from '@rollup/plugin-terser'
+const esbuild = require('rollup-plugin-esbuild').default
+const resolve = require('@rollup/plugin-node-resolve')
+const commonjs = require('@rollup/plugin-commonjs')
+const json = require('@rollup/plugin-json')
+const terser = require('@rollup/plugin-terser')
 
 const plugins = [
   resolve({
@@ -11,16 +11,20 @@ const plugins = [
   }),
   commonjs(),
   json(),
-  typescript({
-    tsconfig: './tsconfig.json',
-    declaration: true,
-    declarationDir: './lib',
-    module: 'esnext',
+  esbuild({
+    include: /\.ts$/,
+    exclude: /node_modules/,
+    sourceMap: false,
+    minify: false,
     target: 'es2017',
+    tsconfig: './tsconfig.json',
+    loaders: {
+      '.ts': 'ts',
+    },
   }),
 ]
 
-export default [
+module.exports = [
   // ESM build
   {
     input: 'src/index.serverless.ts',
