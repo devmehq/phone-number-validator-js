@@ -28,14 +28,28 @@
   "main": "lib/index.js",
   "module": "lib/index.es.js",
   "types": "lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.es.js",
+      "require": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    },
+    "./serverless": {
+      "import": "./lib/serverless.esm.js",
+      "require": "./lib/serverless.cjs.js",
+      "types": "./lib/index.serverless.d.ts"
+    }
+  },
   "files": [
     "lib",
     "resources"
   ],
   "scripts": {
-    "build": "rm -rf lib && rollup -c rollup.config.cjs",
+    "build": "yarn build:all",
+    "build:main": "rm -rf lib && rollup -c rollup.config.cjs && yarn build:types",
     "build:serverless": "rollup -c rollup.config.serverless.cjs",
-    "build:all": "yarn build && yarn build:serverless",
+    "build:all": "yarn build:main && yarn build:serverless",
+    "build:types": "tsc --declaration --emitDeclarationOnly --outDir lib --declarationMap",
     "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
     "prepublishOnly": "yarn build:all",
     "format": "biome format --write .",
@@ -43,7 +57,8 @@
     "lint:fix": "biome lint --write .",
     "check": "biome check .",
     "test": "jest",
-    "watch": "rm -rf lib && rollup -cw"
+    "watch": "rm -rf lib && rollup -cw rollup.config.cjs",
+    "watch:serverless": "rollup -cw rollup.config.serverless.cjs"
   },
   "dependencies": {
     "bson": "^6.10.4",
