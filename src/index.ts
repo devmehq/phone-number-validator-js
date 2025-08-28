@@ -1,9 +1,9 @@
 export * from 'libphonenumber-js'
 import type { PhoneNumber } from 'libphonenumber-js'
 import type { CarrierLocale, GeocoderLocale } from './locales'
-import { readFileSync } from 'fs'
+import { readFileSync } from 'node:fs'
 import { deserialize, type Document } from 'bson'
-import { join } from 'path'
+import { join } from 'node:path'
 import { lru, type LRU } from 'tiny-lru'
 
 const DEFAULT_CACHE_SIZE = 100

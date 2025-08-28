@@ -14,8 +14,10 @@ export default {
     },
   ],
   external: [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})],
-  plugins: [typescript({
-    tsconfig: './tsconfig.json',
-    declarationDir: './lib',
-  })],
+  plugins: [
+    typescript({
+      tsconfig: './tsconfig.json',
+      declarationDir: './lib',
+    }),
+  ],
 }

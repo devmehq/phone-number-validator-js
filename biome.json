@@ -68,7 +68,15 @@
       "bracketSpacing": true,
       "bracketSameLine": false
     },
-    "globals": ["jest", "it", "describe", "expect", "beforeEach", "afterEach", "Deno"]
+    "globals": [
+      "jest",
+      "it",
+      "describe",
+      "expect",
+      "beforeEach",
+      "afterEach",
+      "Deno"
+    ]
   },
   "json": {
     "formatter": {

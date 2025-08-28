@@ -1,6 +1,7 @@
 import {
   setResourceLoader,
-  parsePhoneNumber,
+  parsePhoneNumberWithError,
+  parsePhoneNumberFromString,
   geocoderAsync,
   carrierAsync,
   timezonesAsync,
@@ -69,7 +70,7 @@ describe('Serverless Lite Version', () => {
 
   describe('Phone Number Parsing', () => {
     it('should parse valid US phone number', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       expect(parsed).toBeDefined()
       expect(parsed?.isValid()).toBe(true)
       expect(parsed?.country).toBe('US')
@@ -77,7 +78,7 @@ describe('Serverless Lite Version', () => {
     })
 
     it('should parse international format', () => {
-      const parsed = parsePhoneNumber('+44 20 7946 0958', 'GB')
+      const parsed = parsePhoneNumberWithError('+44 20 7946 0958', 'GB')
       expect(parsed).toBeDefined()
       expect(parsed?.isValid()).toBe(true)
       expect(parsed?.country).toBe('GB')
@@ -86,7 +87,6 @@ describe('Serverless Lite Version', () => {
     it('should handle invalid numbers', () => {
       // parsePhoneNumber throws for completely invalid input
       // Use parsePhoneNumberFromString for safer parsing
-      const { parsePhoneNumberFromString } = require('../src/index.serverless')
       const parsed = parsePhoneNumberFromString('invalid', 'US')
       expect(parsed).toBeUndefined()
     })
@@ -94,21 +94,21 @@ describe('Serverless Lite Version', () => {
 
   describe('Async Resource Loading', () => {
     it('should load geocoder data asynchronously', async () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const geo = await geocoderAsync(parsed)
       // Mock data returns "San Francisco, CA" for prefix 415555
       expect(geo).toBe('San Francisco, CA')
     })
 
     it('should load carrier data asynchronously', async () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const car = await carrierAsync(parsed)
       // Mock data returns "Verizon" for prefix 415555
       expect(car).toBe('Verizon')
     })
 
     it('should load timezone data asynchronously', async () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const tz = await timezonesAsync(parsed)
       // Mock data returns ["America/Los_Angeles"] for prefix 1415555
       expect(tz).toEqual(['America/Los_Angeles'])
@@ -117,19 +117,19 @@ describe('Serverless Lite Version', () => {
 
   describe('Sync Resource Loading', () => {
     it('should load geocoder data synchronously', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const geo = geocoder(parsed)
       expect(geo).toBe('San Francisco, CA')
     })
 
     it('should load carrier data synchronously', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const car = carrier(parsed)
       expect(car).toBe('Verizon')
     })
 
     it('should load timezone data synchronously', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const tz = timezones(parsed)
       expect(tz).toEqual(['America/Los_Angeles'])
     })
@@ -137,7 +137,7 @@ describe('Serverless Lite Version', () => {
 
   describe('Cache Management', () => {
     it('should clear cache', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       geocoder(parsed)
       expect(getCacheSize()).toBeGreaterThanOrEqual(0)
       clearCache()
@@ -154,14 +154,14 @@ describe('Serverless Lite Version', () => {
 
   describe('Resource Loader', () => {
     it('should handle missing resources gracefully', async () => {
-      const parsed = parsePhoneNumber('+12125551234', 'US')
+      const parsed = parsePhoneNumberWithError('+12125551234', 'US')
       const geo = await geocoderAsync(parsed)
       expect(geo).toBeNull()
     })
 
     it('should work without resource loader', async () => {
       setResourceLoader(null as any)
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       const geo = await geocoderAsync(parsed)
       expect(geo).toBeNull()
     })
@@ -169,7 +169,7 @@ describe('Serverless Lite Version', () => {
 
   describe('Phone Number Formatting', () => {
     it('should format in various styles', () => {
-      const parsed = parsePhoneNumber('+14155552671', 'US')
+      const parsed = parsePhoneNumberWithError('+14155552671', 'US')
       expect(parsed?.formatInternational()).toBe('+1 415 555 2671')
       expect(parsed?.formatNational()).toBe('(415) 555-2671')
       expect(parsed?.format('E.164')).toBe('+14155552671')
@@ -180,7 +180,7 @@ describe('Serverless Lite Version', () => {
   describe('Number Types', () => {
     it('should identify number type', () => {
       // Use a US mobile number for more predictable type detection
-      const mobile = parsePhoneNumber('+14155552671', 'US')
+      const mobile = parsePhoneNumberWithError('+14155552671', 'US')
       const type = mobile?.getType()
       // US numbers can be FIXED_LINE_OR_MOBILE
       expect(['MOBILE', 'FIXED_LINE_OR_MOBILE']).toContain(type)
