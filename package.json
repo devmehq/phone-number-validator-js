@@ -34,9 +34,15 @@
   ],
   "scripts": {
     "build": "rm -rf lib && rollup -c --bundleConfigAsCjs",
+    "build:serverless": "rollup -c rollup.config.serverless.js --bundleConfigAsCjs",
+    "build:serverless:lite": "rollup -c rollup.config.serverless.lite.js --bundleConfigAsCjs",
+    "build:all": "yarn build && yarn build:serverless:lite",
     "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
-    "prepublishOnly": "yarn build",
-    "prettier": "prettier --write \\\"src/**/*.ts\\\" \\\"__tests__/**/*.ts\\\"",
+    "prepublishOnly": "yarn build:all",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
+    "lint:fix": "biome lint --write .",
+    "check": "biome check .",
     "test": "jest",
     "watch": "rm -rf lib && rollup -cw"
   },
@@ -46,6 +52,11 @@
     "tiny-lru": "^11.4.5"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.2.2",
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-terser": "^0.4.4",
     "@types/bson": "^4.2.4",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.3.0",

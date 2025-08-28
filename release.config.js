@@ -70,8 +70,7 @@ module.exports = {
           'npm-shrinkwrap.json',
           'CHANGELOG.md',
         ],
-        message:
-          'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
+        message: 'chore(release): ${nextRelease.version} [skip ci]\n\n${nextRelease.notes}',
         GIT_AUTHOR_NAME: pkg.author.name,
         GIT_AUTHOR_EMAIL: pkg.author.email,
         GIT_COMMITTER_NAME: pkg.author.name,

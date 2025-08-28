@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phone Number Validator - Browser Example</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .input-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 14px;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            display: none;
+        }
+        .result.show {
+            display: block;
+        }
+        .result.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .result.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        .result h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+        }
+        .result-item {
+            margin: 8px 0;
+            padding: 8px;
+            background: white;
+            border-radius: 3px;
+        }
+        .result-label {
+            font-weight: bold;
+            color: #555;
+        }
+        .loading {
+            text-align: center;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Phone Number Validator</h1>
+        
+        <div class="input-group">
+            <label for="phoneNumber">Phone Number</label>
+            <input type="tel" id="phoneNumber" placeholder="+1 415 555 2671" />
+        </div>
+        
+        <div class="input-group">
+            <label for="countryCode">Default Country (optional)</label>
+            <select id="countryCode">
+                <option value="">Auto-detect</option>
+                <option value="US">United States</option>
+                <option value="GB">United Kingdom</option>
+                <option value="CA">Canada</option>
+                <option value="AU">Australia</option>
+                <option value="DE">Germany</option>
+                <option value="FR">France</option>
+                <option value="JP">Japan</option>
+                <option value="CN">China</option>
+                <option value="IN">India</option>
+                <option value="BR">Brazil</option>
+            </select>
+        </div>
+        
+        <button id="validateBtn" onclick="validatePhoneNumber()">Validate Phone Number</button>
+        
+        <div id="result" class="result"></div>
+    </div>
+
+    <!-- Load the UMD build -->
+    <script src="../../lib/serverless.umd.js"></script>
+    
+    <script>
+        // The library is available as PhoneNumberValidator global
+        const { parsePhoneNumber, geocoder, carrier, timezones } = PhoneNumberValidator;
+        
+        function validatePhoneNumber() {
+            const phoneInput = document.getElementById('phoneNumber').value;
+            const countryCode = document.getElementById('countryCode').value;
+            const resultDiv = document.getElementById('result');
+            const button = document.getElementById('validateBtn');
+            
+            if (!phoneInput) {
+                showResult('error', 'Please enter a phone number');
+                return;
+            }
+            
+            // Disable button during validation
+            button.disabled = true;
+            button.textContent = 'Validating...';
+            
+            try {
+                const parsed = parsePhoneNumber(phoneInput, countryCode || undefined);
+                
+                if (!parsed || !parsed.isValid()) {
+                    showResult('error', 'Invalid phone number format');
+                } else {
+                    const geo = geocoder(parsed);
+                    const car = carrier(parsed);
+                    const tz = timezones(parsed);
+                    
+                    const html = `
+                        <h3>✓ Valid Phone Number</h3>
+                        <div class="result-item">
+                            <span class="result-label">International:</span> ${parsed.formatInternational()}
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">National:</span> ${parsed.formatNational()}
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">E.164:</span> ${parsed.format('E.164')}
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Country:</span> ${parsed.country || 'Unknown'}
+                        </div>
+                        <div class="result-item">
+                            <span class="result-label">Type:</span> ${parsed.getType() || 'Unknown'}
+                        </div>
+                        ${geo ? `<div class="result-item"><span class="result-label">Location:</span> ${geo}</div>` : ''}
+                        ${car ? `<div class="result-item"><span class="result-label">Carrier:</span> ${car}</div>` : ''}
+                        ${tz ? `<div class="result-item"><span class="result-label">Timezones:</span> ${tz.join(', ')}</div>` : ''}
+                    `;
+                    
+                    showResult('success', html);
+                }
+            } catch (error) {
+                showResult('error', `Error: ${error.message}`);
+            } finally {
+                // Re-enable button
+                button.disabled = false;
+                button.textContent = 'Validate Phone Number';
+            }
+        }
+        
+        function showResult(type, content) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.className = `result show ${type}`;
+            resultDiv.innerHTML = content;
+        }
+        
+        // Allow Enter key to trigger validation
+        document.getElementById('phoneNumber').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                validatePhoneNumber();
+            }
+        });
+        
+        // Example numbers for testing
+        console.log('Example phone numbers for testing:');
+        console.log('US: +1 415 555 2671');
+        console.log('UK: +44 20 7946 0958');
+        console.log('Germany: +49 30 12345678');
+        console.log('Japan: +81 3 1234 5678');
+    </script>
+</body>
+</html>

@@ -2,25 +2,15 @@
   "compilerOptions": {
     "target": "ES5",
     "module": "esnext",
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "declaration": true,
     "strict": true,
     "noImplicitAny": true,
     "moduleResolution": "node",
-    "types": [
-      "node",
-      "jest"
-    ],
+    "types": ["node", "jest"],
     "esModuleInterop": true,
     "downlevelIteration": true
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "**/*.test.ts"
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.test.ts"]
 }
