@@ -1,3 +1,4 @@
+// Lightweight serverless version - requires resource loading at runtime
 export * from 'libphonenumber-js'
 import type { PhoneNumber } from 'libphonenumber-js'
 import type { CarrierLocale, GeocoderLocale } from './locales'
@@ -7,14 +8,20 @@ import { lru, type LRU } from 'tiny-lru'
 const DEFAULT_CACHE_SIZE = 100
 let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
 
-let resourceData: Map<string, Uint8Array> | null = null
-
-export function initializeResources(resources: Map<string, Uint8Array>) {
-  resourceData = resources
+// Resource loader interface - platforms must implement this
+export interface ResourceLoader {
+  loadResource(path: string): Promise<Uint8Array | null>
+  loadResourceSync?(path: string): Uint8Array | null
 }
 
-function getCode(dataPath: string, nationalNumber: string): string | null {
-  if (!dataPath || !nationalNumber || !resourceData) {
+let resourceLoader: ResourceLoader | null = null
+
+export function setResourceLoader(loader: ResourceLoader) {
+  resourceLoader = loader
+}
+
+async function getCodeAsync(dataPath: string, nationalNumber: string): Promise<string | null> {
+  if (!dataPath || !nationalNumber || !resourceLoader) {
     return null
   }
 
@@ -22,7 +29,7 @@ function getCode(dataPath: string, nationalNumber: string): string | null {
     let data = codeDataCache.get(dataPath)
 
     if (!data) {
-      const bData = resourceData.get(dataPath)
+      const bData = await resourceLoader.loadResource(dataPath)
       if (!bData) {
         return null
       }
@@ -44,7 +51,70 @@ function getCode(dataPath: string, nationalNumber: string): string | null {
   return null
 }
 
-function getLocalizedData(
+function getCodeSync(dataPath: string, nationalNumber: string): string | null {
+  if (!dataPath || !nationalNumber || !resourceLoader || !resourceLoader.loadResourceSync) {
+    return null
+  }
+
+  try {
+    let data = codeDataCache.get(dataPath)
+
+    if (!data) {
+      const bData = resourceLoader.loadResourceSync(dataPath)
+      if (!bData) {
+        return null
+      }
+      data = deserialize(Buffer.from(bData))
+      codeDataCache.set(dataPath, data)
+    }
+
+    let prefix = nationalNumber
+    while (prefix.length > 0) {
+      const description = data[prefix]
+      if (description) {
+        return description as string
+      }
+      prefix = prefix.substring(0, prefix.length - 1)
+    }
+  } catch (err) {
+    console.error(`Error loading data from ${dataPath}:`, err)
+  }
+  return null
+}
+
+async function getLocalizedDataAsync(
+  resourceType: 'geocodes' | 'carrier',
+  phonenumber: PhoneNumber | undefined,
+  locale: string,
+  fallbackLocale: string = 'en'
+): Promise<string | null> {
+  if (!phonenumber) {
+    return null
+  }
+
+  const nationalNumber = phonenumber.nationalNumber?.toString()
+  const countryCallingCode = phonenumber.countryCallingCode?.toString()
+
+  if (!nationalNumber || !countryCallingCode) {
+    return null
+  }
+
+  let dataPath = `${resourceType}/${locale}/${countryCallingCode}.bson`
+
+  const code = await getCodeAsync(dataPath, nationalNumber)
+  if (code) {
+    return code
+  }
+
+  if (locale !== fallbackLocale) {
+    dataPath = `${resourceType}/${fallbackLocale}/${countryCallingCode}.bson`
+    return getCodeAsync(dataPath, nationalNumber)
+  }
+
+  return null
+}
+
+function getLocalizedDataSync(
   resourceType: 'geocodes' | 'carrier',
   phonenumber: PhoneNumber | undefined,
   locale: string,
@@ -63,31 +133,70 @@ function getLocalizedData(
 
   let dataPath = `${resourceType}/${locale}/${countryCallingCode}.bson`
 
-  const code = getCode(dataPath, nationalNumber)
+  const code = getCodeSync(dataPath, nationalNumber)
   if (code) {
     return code
   }
 
   if (locale !== fallbackLocale) {
     dataPath = `${resourceType}/${fallbackLocale}/${countryCallingCode}.bson`
-    return getCode(dataPath, nationalNumber)
+    return getCodeSync(dataPath, nationalNumber)
   }
 
   return null
 }
 
+// Async versions
+export async function geocoderAsync(
+  phonenumber: PhoneNumber | undefined,
+  locale: GeocoderLocale = 'en'
+): Promise<string | null> {
+  return getLocalizedDataAsync('geocodes', phonenumber, locale, 'en')
+}
+
+export async function carrierAsync(
+  phonenumber: PhoneNumber | undefined,
+  locale: CarrierLocale = 'en'
+): Promise<string | null> {
+  return getLocalizedDataAsync('carrier', phonenumber, locale, 'en')
+}
+
+export async function timezonesAsync(
+  phonenumber: PhoneNumber | undefined
+): Promise<string[] | null> {
+  if (!phonenumber || !phonenumber.number) {
+    return null
+  }
+
+  let nr = phonenumber.number.toString()
+  if (!nr) {
+    return null
+  }
+
+  nr = nr.replace(/^\+/, '')
+  const dataPath = 'timezones.bson'
+  const zones = await getCodeAsync(dataPath, nr)
+
+  if (typeof zones === 'string' && zones.length > 0) {
+    return zones.split('&').filter((zone) => zone.length > 0)
+  }
+
+  return null
+}
+
+// Sync versions (requires sync resource loader)
 export function geocoder(
   phonenumber: PhoneNumber | undefined,
   locale: GeocoderLocale = 'en'
 ): string | null {
-  return getLocalizedData('geocodes', phonenumber, locale, 'en')
+  return getLocalizedDataSync('geocodes', phonenumber, locale, 'en')
 }
 
 export function carrier(
   phonenumber: PhoneNumber | undefined,
   locale: CarrierLocale = 'en'
 ): string | null {
-  return getLocalizedData('carrier', phonenumber, locale, 'en')
+  return getLocalizedDataSync('carrier', phonenumber, locale, 'en')
 }
 
 export function timezones(phonenumber: PhoneNumber | undefined): string[] | null {
@@ -102,7 +211,7 @@ export function timezones(phonenumber: PhoneNumber | undefined): string[] | null
 
   nr = nr.replace(/^\+/, '')
   const dataPath = 'timezones.bson'
-  const zones = getCode(dataPath, nr)
+  const zones = getCodeSync(dataPath, nr)
 
   if (typeof zones === 'string' && zones.length > 0) {
     return zones.split('&').filter((zone) => zone.length > 0)

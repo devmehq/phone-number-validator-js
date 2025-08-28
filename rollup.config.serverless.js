@@ -1,59 +1,8 @@
-import typescript from 'rollup-plugin-typescript2'
-import { readFileSync, readdirSync, statSync, existsSync } from 'fs'
-import { join, extname } from 'path'
+import typescript from '@rollup/plugin-typescript'
 import resolve from '@rollup/plugin-node-resolve'
 import commonjs from '@rollup/plugin-commonjs'
 import json from '@rollup/plugin-json'
 import terser from '@rollup/plugin-terser'
-
-function serverlessResourcePlugin() {
-  return {
-    name: 'serverless-resource',
-    generateBundle(options, bundle) {
-      const resourcesPath = join(__dirname, 'resources')
-      const resources = new Map()
-
-      function scanDir(dir, basePath = '') {
-        if (!existsSync(dir)) return
-
-        const items = readdirSync(dir)
-        for (const item of items) {
-          const fullPath = join(dir, item)
-          const stat = statSync(fullPath)
-
-          if (stat.isDirectory()) {
-            scanDir(fullPath, join(basePath, item))
-          } else if (extname(item) === '.bson') {
-            const relativePath = join(basePath, item).replace(/\\/g, '/')
-            const data = readFileSync(fullPath)
-            resources.set(relativePath, data)
-          }
-        }
-      }
-
-      scanDir(resourcesPath)
-
-      const resourceMap = {}
-      resources.forEach((data, path) => {
-        resourceMap[path] = Array.from(data)
-      })
-
-      const resourceCode = `
-const serverlessResources = new Map(Object.entries(${JSON.stringify(resourceMap)}).map(([k, v]) => [k, new Uint8Array(v)]));
-`
-
-      for (const fileName in bundle) {
-        if (bundle[fileName].type === 'chunk') {
-          bundle[fileName].code = resourceCode + bundle[fileName].code
-          bundle[fileName].code = bundle[fileName].code.replace(
-            'let resourceData = null;',
-            'let resourceData = serverlessResources;'
-          )
-        }
-      }
-    },
-  }
-}
 
 const plugins = [
   resolve({
@@ -63,18 +12,16 @@ const plugins = [
   commonjs(),
   json(),
   typescript({
-    tsconfigOverride: {
-      compilerOptions: {
-        declaration: false,
-        module: 'esnext',
-        target: 'es2015',
-      },
-    },
+    tsconfig: './tsconfig.json',
+    declaration: true,
+    declarationDir: './lib',
+    module: 'esnext',
+    target: 'es2017',
   }),
-  serverlessResourcePlugin(),
 ]
 
 export default [
+  // ESM build
   {
     input: 'src/index.serverless.ts',
     output: {
@@ -83,14 +30,25 @@ export default [
     },
     plugins,
   },
+  // ESM minified
   {
     input: 'src/index.serverless.ts',
     output: {
       file: 'lib/serverless.esm.min.js',
       format: 'es',
     },
-    plugins: [...plugins, terser()],
+    plugins: [
+      ...plugins,
+      terser({
+        compress: {
+          drop_console: true,
+          passes: 2,
+        },
+        mangle: true,
+      }),
+    ],
   },
+  // CommonJS build
   {
     input: 'src/index.serverless.ts',
     output: {
@@ -100,6 +58,7 @@ export default [
     },
     plugins,
   },
+  // UMD build for browsers
   {
     input: 'src/index.serverless.ts',
     output: {
@@ -110,6 +69,7 @@ export default [
     },
     plugins,
   },
+  // UMD minified
   {
     input: 'src/index.serverless.ts',
     output: {
@@ -118,6 +78,15 @@ export default [
       name: 'PhoneNumberValidator',
       exports: 'named',
     },
-    plugins: [...plugins, terser()],
+    plugins: [
+      ...plugins,
+      terser({
+        compress: {
+          drop_console: true,
+          passes: 2,
+        },
+        mangle: true,
+      }),
+    ],
   },
 ]

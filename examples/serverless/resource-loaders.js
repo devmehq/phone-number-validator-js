@@ -17,7 +17,7 @@ export class CloudflareKVLoader {
 
 // Usage in Cloudflare Worker:
 /*
-import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.lite.esm.js';
+import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.esm.js';
 
 export default {
   async fetch(request, env) {
@@ -64,7 +64,7 @@ export class S3ResourceLoader {
 // Usage in Lambda:
 /*
 import AWS from 'aws-sdk';
-import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.lite.esm.js';
+import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.esm.js';
 
 const s3 = new AWS.S3();
 const loader = new S3ResourceLoader(s3, 'my-bucket');
@@ -125,7 +125,7 @@ export class RemoteFetchLoader {
 
 // Usage in Vercel Edge Function:
 /*
-import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.lite.esm.js';
+import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.esm.js';
 
 const loader = new RemoteFetchLoader('https://cdn.example.com/phone-data');
 
@@ -157,7 +157,7 @@ export class DenoKVLoader {
 
 // Usage in Deno Deploy:
 /*
-import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.lite.esm.js';
+import { setResourceLoader, parsePhoneNumber, geocoderAsync } from './serverless.esm.js';
 
 const kv = await Deno.openKv();
 const loader = new DenoKVLoader(kv);
@@ -192,7 +192,7 @@ export class BundledResourceLoader {
 
 // Usage with pre-bundled resources:
 /*
-import { setResourceLoader, parsePhoneNumber, geocoder } from './serverless.lite.esm.js';
+import { setResourceLoader, parsePhoneNumber, geocoder } from './serverless.esm.js';
 import resources from './bundled-resources.js';
 
 const loader = new BundledResourceLoader(resources);

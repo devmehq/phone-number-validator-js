@@ -1,15 +1,12 @@
 # Serverless Phone Number Validator
 
-This library now supports serverless environments without Node.js dependencies! We provide two approaches for serverless deployment:
-
-1. **Lite Version** - Smallest bundle size (244KB minified), requires external resource loading
-2. **Full Version** - All resources bundled (40MB), no external dependencies needed
+This library now supports serverless environments without Node.js dependencies! The serverless version uses a lightweight resource loader pattern, allowing you to load phone number metadata from your preferred storage backend.
 
 ## Features
 
 - **Zero Node.js dependencies** - Works in any JavaScript runtime
-- **Flexible resource loading** - Choose between bundled or external resources
-- **Optimized builds** - From 244KB (lite) to 40MB (full)
+- **Lightweight** - Only 244KB minified
+- **Flexible resource loading** - Load metadata from KV, S3, CDN, or any storage backend
 - **Multiple formats** - ESM, CommonJS, and UMD builds available
 - **Platform agnostic** - Works on AWS Lambda, Cloudflare Workers, Vercel Edge, Deno Deploy, and more
 
@@ -23,37 +20,23 @@ yarn add @devmehq/phone-number-validator-js
 
 ## Building for Serverless
 
-### Lite Version (Recommended for size-constrained environments)
-
 ```bash
-# Build lite versions (244KB minified)
-yarn build:serverless:lite
-```
-
-Creates in `lib/`:
-- `serverless.lite.esm.js` - ES Module (555KB)
-- `serverless.lite.esm.min.js` - ES Module minified (244KB)
-- `serverless.lite.cjs.js` - CommonJS (556KB)
-- `serverless.lite.umd.js` - UMD (568KB)
-- `serverless.lite.umd.min.js` - UMD minified (244KB)
-
-### Full Version (All resources bundled)
-
-```bash
-# Build full versions (40MB, includes all data)
+# Build serverless versions
 yarn build:serverless
 ```
 
 Creates in `lib/`:
-- `serverless.esm.js` - ES Module with all resources
-- `serverless.cjs.js` - CommonJS with all resources
-- `serverless.umd.js` - UMD with all resources
+- `serverless.esm.js` - ES Module (555KB)
+- `serverless.esm.min.js` - ES Module minified (244KB)
+- `serverless.cjs.js` - CommonJS (556KB)
+- `serverless.umd.js` - UMD (568KB)
+- `serverless.umd.min.js` - UMD minified (244KB)
 
 ## Usage
 
-### Lite Version (With Resource Loader)
+### Using the Serverless Version
 
-The lite version requires you to provide a resource loader for accessing phone number metadata:
+The serverless version requires you to provide a resource loader for accessing phone number metadata:
 
 ```javascript
 import { 
@@ -62,7 +45,7 @@ import {
   geocoderAsync, 
   carrierAsync, 
   timezonesAsync 
-} from '@devmehq/phone-number-validator-js/lib/serverless.lite.esm.min.js';
+} from '@devmehq/phone-number-validator-js/lib/serverless.esm.min.js';
 
 // Set up your resource loader (see examples below)
 import { CloudflareKVLoader } from './resource-loaders.js';
@@ -89,27 +72,6 @@ if (phoneNumber && phoneNumber.isValid()) {
 }
 ```
 
-### Full Version (Self-contained)
-
-The full version includes all resources and works immediately:
-
-```javascript
-import { parsePhoneNumber, geocoder, carrier, timezones } from '@devmehq/phone-number-validator-js/lib/serverless.esm.js';
-
-const phoneNumber = parsePhoneNumber('+14155552671', 'US');
-
-if (phoneNumber && phoneNumber.isValid()) {
-  console.log({
-    international: phoneNumber.formatInternational(),
-    national: phoneNumber.formatNational(),
-    e164: phoneNumber.format('E.164'),
-    country: phoneNumber.country,
-    geocoder: geocoder(phoneNumber),
-    carrier: carrier(phoneNumber),
-    timezones: timezones(phoneNumber)
-  });
-}
-```
 
 ## Platform-Specific Deployment
 
@@ -325,9 +287,9 @@ All functions from the main library are available in the serverless build:
 - `getCacheSize()` - Get current cache size
 - `setCacheSize(size)` - Set maximum cache size
 
-## Resource Loaders (Lite Version)
+## Resource Loaders
 
-The lite version requires a resource loader to fetch phone number metadata. See `examples/serverless/resource-loaders.js` for implementations:
+The serverless version requires a resource loader to fetch phone number metadata. See `examples/serverless/resource-loaders.js` for implementations:
 
 ### Available Loaders
 
@@ -361,14 +323,11 @@ class CustomResourceLoader {
 ## Performance Considerations
 
 ### Bundle Sizes
-#### Lite Version (Recommended)
 - ESM minified: **244KB**
 - UMD minified: **244KB**
 - ESM unminified: 555KB
 - CommonJS: 556KB
-
-#### Full Version
-- All formats: ~40MB (includes all phone metadata)
+- UMD unminified: 568KB
 
 ### Memory Usage
 - Initial load: ~2MB

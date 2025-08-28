@@ -11,7 +11,7 @@ import {
   getCacheSize,
   setCacheSize,
   type ResourceLoader,
-} from '../src/index.serverless.lite'
+} from '../src/index.serverless'
 
 // Mock resource loader for testing
 class MockResourceLoader implements ResourceLoader {
