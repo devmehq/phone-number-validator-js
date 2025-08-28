@@ -25,9 +25,6 @@
   },
   "license": "BSL 1.1",
   "author": "DEV.ME <support@dev.me> (https://dev.me)",
-  "main": "lib/index.js",
-  "module": "lib/index.es.js",
-  "types": "lib/index.d.ts",
   "exports": {
     ".": {
       "import": "./lib/index.es.js",
@@ -40,22 +37,24 @@
       "types": "./lib/index.serverless.d.ts"
     }
   },
+  "main": "lib/index.js",
+  "module": "lib/index.es.js",
+  "types": "lib/index.d.ts",
   "files": [
     "lib",
     "resources"
   ],
   "scripts": {
-    "build": "yarn build:all",
+    "build": "yarn build:main && yarn build:serverless",
     "build:main": "rm -rf lib && rollup -c rollup.config.cjs && yarn build:types",
     "build:serverless": "rollup -c rollup.config.serverless.cjs",
-    "build:all": "yarn build:main && yarn build:serverless",
     "build:types": "tsc --declaration --emitDeclarationOnly --outDir lib --declarationMap",
-    "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
-    "prepublishOnly": "yarn build:all",
+    "check": "biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
-    "check": "biome check .",
+    "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
+    "prepublishOnly": "yarn build:all",
     "test": "jest",
     "watch": "rm -rf lib && rollup -cw rollup.config.cjs",
     "watch:serverless": "rollup -cw rollup.config.serverless.cjs"
