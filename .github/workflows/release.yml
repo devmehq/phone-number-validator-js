@@ -49,9 +49,75 @@ jobs:
           yarn preparemetadata
           yarn test
 
+      - name: Build
+        run: yarn build
+
+      - name: Get Package Version
+        id: package_version
+        run: echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+
+      - name: Get Git Tags
+        id: git_tags
+        run: |
+          LATEST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          echo "latest_tag=$LATEST_TAG" >> $GITHUB_OUTPUT
+          COMMIT_COUNT=$(git rev-list --count HEAD)
+          echo "commit_count=$COMMIT_COUNT" >> $GITHUB_OUTPUT
+          ALL_TAGS=$(git tag --sort=-version:refname | head -10 | tr '\n' ' ')
+          echo "recent_tags=$ALL_TAGS" >> $GITHUB_OUTPUT
+
+      - name: Update Job Summary
+        run: |
+          echo "# 🚀 Phone Number Validator JS - Production Release" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📊 Build Information" >> $GITHUB_STEP_SUMMARY
+          echo "- **Current Version:** \`${{ steps.package_version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Latest Git Tag:** \`${{ steps.git_tags.outputs.latest_tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Total Commits:** \`${{ steps.git_tags.outputs.commit_count }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\` (Production)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit SHA:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🏷️ Recent Tags" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.git_tags.outputs.recent_tags }}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🧪 Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "✅ All tests passed successfully" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 📁 Generated Files" >> $GITHUB_STEP_SUMMARY
+          echo "- **Main library:** \`lib/index.js\` (CJS), \`lib/index.es.js\` (ESM)" >> $GITHUB_STEP_SUMMARY
+          echo "- **Serverless builds:** \`lib/serverless.cjs.js\`, \`lib/serverless.esm.js\`, \`lib/serverless.umd.js\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Minified builds:** \`lib/serverless.esm.min.js\`, \`lib/serverless.umd.min.js\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **TypeScript declarations:** \`lib/index.d.ts\`, \`lib/index.serverless.d.ts\`" >> $GITHUB_STEP_SUMMARY
+
       - name: Release
+        id: semantic_release
         run: |
           git config --global user.email "support@dev.me"
           git config --global user.name "DEV.ME Team"
           npm i -g semantic-release @semantic-release/git @semantic-release/github conventional-changelog-conventionalcommits
           npx semantic-release --no-ci --debug
+
+      - name: Update Release Summary
+        run: |
+          NEW_VERSION=$(node -p "require('./package.json').version")
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## 🎉 Release Information" >> $GITHUB_STEP_SUMMARY
+          if [ "$NEW_VERSION" != "${{ steps.package_version.outputs.version }}" ]; then
+            echo "🎊 **NEW PRODUCTION RELEASE CREATED!** 🎊" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "- **New Version:** \`v$NEW_VERSION\` 🏷️" >> $GITHUB_STEP_SUMMARY
+            echo "- **Previous Version:** \`${{ steps.package_version.outputs.version }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "- **Release Type:** Production (master branch) 🚀" >> $GITHUB_STEP_SUMMARY
+            echo "- **NPM Package:** [@devmehq/phone-number-validator-js](https://www.npmjs.com/package/@devmehq/phone-number-validator-js)" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+            echo "### 📦 Installation" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
+            echo "npm install @devmehq/phone-number-validator-js@$NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+            echo "# or" >> $GITHUB_STEP_SUMMARY
+            echo "yarn add @devmehq/phone-number-validator-js@$NEW_VERSION" >> $GITHUB_STEP_SUMMARY
+            echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No new release created (no relevant changes since last release)" >> $GITHUB_STEP_SUMMARY
+          fi
