@@ -53,15 +53,32 @@
     "format": "biome format --write .",
     "lint": "biome lint .",
     "lint:fix": "biome lint --write .",
+    "prepare": "husky",
     "preparemetadata": "rm -rf resources && node .scripts/prepare.js && rm -rf resources/libphonenumber",
     "prepublishOnly": "yarn build",
+    "release": "semantic-release",
+    "release:dry": "semantic-release --dry-run",
     "test": "jest",
     "watch": "rm -rf lib && rollup -cw rollup.config.cjs",
     "watch:serverless": "rollup -cw rollup.config.serverless.cjs"
   },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
+  },
+  "lint-staged": {
+    "*.{js,ts,jsx,tsx}": [
+      "biome check --write --no-errors-on-unmatched",
+      "biome format --write --no-errors-on-unmatched"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "biome format --write --no-errors-on-unmatched"
+    ]
+  },
   "dependencies": {
     "bson": "^6.10.4",
-    "libphonenumber-js": "^1.12.14",
+    "libphonenumber-js": "^1.12.15",
     "tiny-lru": "^11.4.5"
   },
   "devDependencies": {
@@ -75,7 +92,9 @@
     "@types/node": "^24.3.0",
     "@types/shelljs": "^0.8.17",
     "esbuild": "^0.25.9",
+    "husky": "^9.1.7",
     "jest": "^30.1.1",
+    "lint-staged": "^16.1.5",
     "prettier": "^3.6.2",
     "rollup": "^4.49.0",
     "rollup-plugin-esbuild": "^6.2.1",
