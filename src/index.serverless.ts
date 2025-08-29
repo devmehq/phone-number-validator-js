@@ -1,9 +1,9 @@
-// Lightweight serverless version - requires resource loading at runtime
 export * from 'libphonenumber-js'
+
+import { type Document, deserialize } from 'bson'
 import type { PhoneNumber } from 'libphonenumber-js'
+import { type LRU, lru } from 'tiny-lru'
 import type { CarrierLocale, GeocoderLocale } from './locales'
-import { deserialize, type Document } from 'bson'
-import { lru, type LRU } from 'tiny-lru'
 
 const DEFAULT_CACHE_SIZE = 100
 let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
@@ -11,6 +11,7 @@ let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
 // Resource loader interface - platforms must implement this
 export interface ResourceLoader {
   loadResource(path: string): Promise<Uint8Array | null>
+
   loadResourceSync?(path: string): Uint8Array | null
 }
 
