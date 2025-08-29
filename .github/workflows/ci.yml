@@ -51,6 +51,9 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Prepare Metadata
+        run: yarn preparemetadata
+
       - name: Verify dependency integrity
         run: yarn audit || true
 

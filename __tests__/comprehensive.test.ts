@@ -1,11 +1,11 @@
 import {
   carrier,
-  geocoder,
-  parsePhoneNumberFromString,
-  timezones,
   clearCache,
+  geocoder,
   getCacheSize,
+  parsePhoneNumberFromString,
   setCacheSize,
+  timezones,
 } from '../src'
 
 describe('Comprehensive Phone Number Validation Tests', () => {

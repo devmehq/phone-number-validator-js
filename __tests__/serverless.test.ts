@@ -31,7 +31,7 @@ class MockResourceLoader implements ResourceLoader {
     )
   }
 
-  private createMockBsonData(data: any): Uint8Array {
+  createMockBsonData(data: any): Uint8Array {
     // Use actual BSON serialization
     const { serialize } = require('bson')
     return new Uint8Array(serialize(data))
@@ -243,20 +243,32 @@ describe('Advanced Serverless Features', () => {
     // Add more diverse test data
     extendedLoader.addMockResource(
       'geocodes/en/44.bson',
-      extendedLoader.createMockBsonData({ '207946': 'London', '131234': 'Edinburgh' })
+      extendedLoader.createMockBsonData({
+        '207946': 'London',
+        '131234': 'Edinburgh',
+      })
     )
     // Add both French and English locale data for France
     extendedLoader.addMockResource(
       'geocodes/fr/33.bson',
-      extendedLoader.createMockBsonData({ '142345': 'Paris', '467890': 'Lyon' })
+      extendedLoader.createMockBsonData({
+        '142345': 'Paris',
+        '467890': 'Lyon',
+      })
     )
     extendedLoader.addMockResource(
       'geocodes/en/33.bson',
-      extendedLoader.createMockBsonData({ '142345': 'Paris', '467890': 'Lyon' })
+      extendedLoader.createMockBsonData({
+        '142345': 'Paris',
+        '467890': 'Lyon',
+      })
     )
     extendedLoader.addMockResource(
       'carrier/en/44.bson',
-      extendedLoader.createMockBsonData({ '207946': 'British Telecom', '131234': 'Vodafone UK' })
+      extendedLoader.createMockBsonData({
+        '207946': 'British Telecom',
+        '131234': 'Vodafone UK',
+      })
     )
     extendedLoader.addMockResource(
       'timezones.bson',
