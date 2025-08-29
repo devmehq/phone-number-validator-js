@@ -1,6 +1,26 @@
 # Changelog
 
-## v1.4.0 (Unreleased)
+## v1.6.0 (Unreleased)
+### Features
+- Add serverless architecture support with lazy resource loading
+- Add lint-staged for automated code quality checks on commit
+- Add comprehensive serverless test suite with 50+ new test cases
+- Add support for concurrent resource loading
+- Add locale fallback mechanism for international support
+
+### Improvements  
+- Enhanced error handling and recovery for resource loading failures
+- Improved cache management with LRU eviction strategy
+- Added performance monitoring for resource loading latency
+- Extended test coverage for edge cases and validation
+- Optimized memory usage in serverless environments
+
+### Development
+- Integrated lint-staged with Husky for pre-commit hooks
+- Added Biome formatting and linting to staged files
+- Improved CI/CD pipeline with semantic-release integration
+
+## v1.5.0
 ### Features
 - Add high-performance LRU caching using tiny-lru library
 - Add cache management API: `clearCache()`, `getCacheSize()`, `setCacheSize()`
