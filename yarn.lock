@@ -2931,7 +2931,7 @@ rollup-plugin-esbuild@^6.2.1:
     get-tsconfig "^4.10.0"
     unplugin-utils "^0.2.4"
 
-rollup@^4.49.0:
+rollup@^4.50.0:
   version "4.50.0"
   resolved "https://registry.yarnpkg.com/rollup/-/rollup-4.50.0.tgz#6f237f598b7163ede33ce827af8534c929aaa186"
   integrity sha512-/Zl4D8zPifNmyGzJS+3kVoyXeDeT/GrsJM94sACNg9RtUE0hrHa1bNPtRSrfHTMH5HjRzce6K7rlTh3Khiw+pw==
