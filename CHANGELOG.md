@@ -14,11 +14,22 @@
 - Added performance monitoring for resource loading latency
 - Extended test coverage for edge cases and validation
 - Optimized memory usage in serverless environments
+- Simplified build configuration with unified Rollup setup
+- Fixed CommonJS compatibility for Rollup config
+
+### Build System Changes
+- Migrated from dual Rollup configuration to unified build system
+- Consolidated serverless and standard builds into single Rollup config
+- Fixed CommonJS format for Rollup config for better compatibility
+- Improved TypeScript configuration for cleaner output
+- Removed redundant rollup.config.serverless.cjs file
+- Streamlined build process with single build command
 
 ### Development
 - Integrated lint-staged with Husky for pre-commit hooks
 - Added Biome formatting and linting to staged files
 - Improved CI/CD pipeline with semantic-release integration
+- Updated dependencies and CI workflows
 
 ## v1.5.0
 ### Features
