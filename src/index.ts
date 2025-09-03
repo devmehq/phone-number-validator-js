@@ -1,13 +1,14 @@
 export * from 'libphonenumber-js'
-import type { PhoneNumber } from 'libphonenumber-js'
-import type { CarrierLocale, GeocoderLocale } from './locales'
+
 import { readFileSync } from 'node:fs'
-import { deserialize, type Document } from 'bson'
 import { join } from 'node:path'
-import { lru, type LRU } from 'tiny-lru'
+import { type Document, deserialize } from 'bson'
+import type { PhoneNumber } from 'libphonenumber-js'
+import { type LRU, lru } from 'tiny-lru'
+import type { CarrierLocale, GeocoderLocale } from './locales'
 
 const DEFAULT_CACHE_SIZE = 100
-let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
+let codeDataCache = lru<Document>(DEFAULT_CACHE_SIZE)
 
 /**
  * Maps the dataPath and prefix to geocode, carrier, timezones or null if this info could not be extracted
@@ -17,7 +18,7 @@ let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
  * @param dataPath Path of the metadata bson file to use
  * @param nationalNumber The national (significant) number without whitespaces e.g. `2133734253`
  */
-function getCode(dataPath: string, nationalNumber: string): string | null {
+function getCode(dataPath: string, nationalNumber: string) {
   if (!dataPath || !nationalNumber) {
     return null
   }
@@ -58,8 +59,8 @@ function getLocalizedData(
   resourceType: 'geocodes' | 'carrier',
   phonenumber: PhoneNumber | undefined,
   locale: string,
-  fallbackLocale: string = 'en'
-): string | null {
+  fallbackLocale = 'en'
+) {
   if (!phonenumber) {
     return null
   }
@@ -106,10 +107,7 @@ function getLocalizedData(
  * @param phonenumber The phone number
  * @param locale The preferred locale to use (falls back to `en` if there are no localized carrier infos for the given locale)
  */
-export function geocoder(
-  phonenumber: PhoneNumber | undefined,
-  locale: GeocoderLocale = 'en'
-): string | null {
+export function geocoder(phonenumber: PhoneNumber | undefined, locale: GeocoderLocale = 'en') {
   return getLocalizedData('geocodes', phonenumber, locale, 'en')
 }
 
@@ -123,10 +121,7 @@ export function geocoder(
  * @param phonenumber The phone number
  * @param locale The preferred locale to use (falls back to `en` if there are no localized carrier infos for the given locale)
  */
-export function carrier(
-  phonenumber: PhoneNumber | undefined,
-  locale: CarrierLocale = 'en'
-): string | null {
+export function carrier(phonenumber: PhoneNumber | undefined, locale: CarrierLocale = 'en') {
   return getLocalizedData('carrier', phonenumber, locale, 'en')
 }
 
@@ -134,7 +129,7 @@ export function carrier(
  * Provides all timezones related to the phone number
  * @param phonenumber The phone number
  */
-export function timezones(phonenumber: PhoneNumber | undefined): string[] | null {
+export function timezones(phonenumber: PhoneNumber | undefined) {
   if (!phonenumber || !phonenumber.number) {
     return null
   }
@@ -159,14 +154,14 @@ export function timezones(phonenumber: PhoneNumber | undefined): string[] | null
  * Clear the internal cache
  * Useful for memory management in long-running processes
  */
-export function clearCache(): void {
+export function clearCache() {
   codeDataCache.clear()
 }
 
 /**
  * Get current cache size
  */
-export function getCacheSize(): number {
+export function getCacheSize() {
   return codeDataCache.size
 }
 
@@ -174,7 +169,7 @@ export function getCacheSize(): number {
  * Set cache max size
  * @param size New maximum cache size
  */
-export function setCacheSize(size: number): void {
+export function setCacheSize(size: number) {
   // Create a new cache with the new size and transfer existing data
   const oldCache = codeDataCache
   codeDataCache = lru<Document>(size)

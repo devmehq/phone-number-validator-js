@@ -45,10 +45,8 @@
     "resources"
   ],
   "scripts": {
-    "build": "yarn build:main && yarn build:serverless",
-    "build:main": "rm -rf lib && rollup -c rollup.config.cjs && yarn build:types",
-    "build:serverless": "rollup -c rollup.config.serverless.cjs",
-    "build:types": "tsc --declaration --emitDeclarationOnly --outDir lib --declarationMap",
+    "build": "rm -rf lib && rollup -c rollup.config.cjs && yarn build:types",
+    "build:types": "tsc --emitDeclarationOnly",
     "check": "biome check .",
     "format": "biome format --write .",
     "lint": "biome lint .",
@@ -59,8 +57,7 @@
     "release": "semantic-release",
     "release:dry": "semantic-release --dry-run",
     "test": "jest",
-    "watch": "rm -rf lib && rollup -cw rollup.config.cjs",
-    "watch:serverless": "rollup -cw rollup.config.serverless.cjs"
+    "watch": "rm -rf lib && rollup -cw rollup.config.cjs"
   },
   "config": {
     "commitizen": {

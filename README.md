@@ -334,6 +334,19 @@ The library uses [tiny-lru](https://www.npmjs.com/package/tiny-lru) for high-per
 - **Configurable cache size** to balance memory usage and performance
 - **<1ms lookups** after initial data load
 
+## Building
+
+Build the library for both standard and serverless environments:
+
+```bash
+yarn build
+```
+
+This command:
+- Creates optimized bundles for CommonJS and ES modules
+- Generates TypeScript declaration files
+- Builds both standard and serverless versions
+
 ## Testing
 
 ```bash

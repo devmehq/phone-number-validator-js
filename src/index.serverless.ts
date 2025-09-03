@@ -6,7 +6,7 @@ import { type LRU, lru } from 'tiny-lru'
 import type { CarrierLocale, GeocoderLocale } from './locales'
 
 const DEFAULT_CACHE_SIZE = 100
-let codeDataCache: LRU<Document> = lru<Document>(DEFAULT_CACHE_SIZE)
+let codeDataCache = lru<Document>(DEFAULT_CACHE_SIZE)
 
 // Resource loader interface - platforms must implement this
 export interface ResourceLoader {
@@ -21,7 +21,7 @@ export function setResourceLoader(loader: ResourceLoader) {
   resourceLoader = loader
 }
 
-async function getCodeAsync(dataPath: string, nationalNumber: string): Promise<string | null> {
+async function getCodeAsync(dataPath: string, nationalNumber: string) {
   if (!dataPath || !nationalNumber || !resourceLoader) {
     return null
   }
@@ -52,7 +52,7 @@ async function getCodeAsync(dataPath: string, nationalNumber: string): Promise<s
   return null
 }
 
-function getCodeSync(dataPath: string, nationalNumber: string): string | null {
+function getCodeSync(dataPath: string, nationalNumber: string) {
   if (!dataPath || !nationalNumber || !resourceLoader || !resourceLoader.loadResourceSync) {
     return null
   }
@@ -87,8 +87,8 @@ async function getLocalizedDataAsync(
   resourceType: 'geocodes' | 'carrier',
   phonenumber: PhoneNumber | undefined,
   locale: string,
-  fallbackLocale: string = 'en'
-): Promise<string | null> {
+  fallbackLocale = 'en'
+) {
   if (!phonenumber) {
     return null
   }
@@ -119,8 +119,8 @@ function getLocalizedDataSync(
   resourceType: 'geocodes' | 'carrier',
   phonenumber: PhoneNumber | undefined,
   locale: string,
-  fallbackLocale: string = 'en'
-): string | null {
+  fallbackLocale = 'en'
+) {
   if (!phonenumber) {
     return null
   }
@@ -151,20 +151,18 @@ function getLocalizedDataSync(
 export async function geocoderAsync(
   phonenumber: PhoneNumber | undefined,
   locale: GeocoderLocale = 'en'
-): Promise<string | null> {
+) {
   return getLocalizedDataAsync('geocodes', phonenumber, locale, 'en')
 }
 
 export async function carrierAsync(
   phonenumber: PhoneNumber | undefined,
   locale: CarrierLocale = 'en'
-): Promise<string | null> {
+) {
   return getLocalizedDataAsync('carrier', phonenumber, locale, 'en')
 }
 
-export async function timezonesAsync(
-  phonenumber: PhoneNumber | undefined
-): Promise<string[] | null> {
+export async function timezonesAsync(phonenumber: PhoneNumber | undefined) {
   if (!phonenumber || !phonenumber.number) {
     return null
   }
@@ -186,21 +184,15 @@ export async function timezonesAsync(
 }
 
 // Sync versions (requires sync resource loader)
-export function geocoder(
-  phonenumber: PhoneNumber | undefined,
-  locale: GeocoderLocale = 'en'
-): string | null {
+export function geocoder(phonenumber: PhoneNumber | undefined, locale: GeocoderLocale = 'en') {
   return getLocalizedDataSync('geocodes', phonenumber, locale, 'en')
 }
 
-export function carrier(
-  phonenumber: PhoneNumber | undefined,
-  locale: CarrierLocale = 'en'
-): string | null {
+export function carrier(phonenumber: PhoneNumber | undefined, locale: CarrierLocale = 'en') {
   return getLocalizedDataSync('carrier', phonenumber, locale, 'en')
 }
 
-export function timezones(phonenumber: PhoneNumber | undefined): string[] | null {
+export function timezones(phonenumber: PhoneNumber | undefined) {
   if (!phonenumber || !phonenumber.number) {
     return null
   }
@@ -221,15 +213,15 @@ export function timezones(phonenumber: PhoneNumber | undefined): string[] | null
   return null
 }
 
-export function clearCache(): void {
+export function clearCache() {
   codeDataCache.clear()
 }
 
-export function getCacheSize(): number {
+export function getCacheSize() {
   return codeDataCache.size
 }
 
-export function setCacheSize(size: number): void {
+export function setCacheSize(size: number) {
   const oldCache = codeDataCache
   codeDataCache = lru<Document>(size)
 
