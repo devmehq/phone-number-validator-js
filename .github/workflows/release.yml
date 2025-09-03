@@ -103,7 +103,7 @@ jobs:
             echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
             echo "" >> $GITHUB_STEP_SUMMARY
             echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
-            echo "- [NPM Package](https://www.npmjs.com/package/@devmehq/email-validator-js/v/${{ steps.semantic_release.outputs.version }})" >> $GITHUB_STEP_SUMMARY
+            echo "- [NPM Package](https://www.npmjs.com/package/@devmehq/phone-number-validator-js/v/${{ steps.semantic_release.outputs.version }})" >> $GITHUB_STEP_SUMMARY
             echo "- [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/${{ steps.semantic_release.outputs.tag }})" >> $GITHUB_STEP_SUMMARY
           else
             echo "### ℹ️ No Release Published" >> $GITHUB_STEP_SUMMARY
