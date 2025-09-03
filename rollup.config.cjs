@@ -1,17 +1,14 @@
-import { readFileSync } from 'node:fs'
-import commonjs from '@rollup/plugin-commonjs'
-import json from '@rollup/plugin-json'
-import resolve from '@rollup/plugin-node-resolve'
-import terser from '@rollup/plugin-terser'
-import esbuild from 'rollup-plugin-esbuild'
+const { readFileSync } = require('node:fs')
+const esbuild = require('rollup-plugin-esbuild').default
+const resolve = require('@rollup/plugin-node-resolve').default
+const commonjs = require('@rollup/plugin-commonjs')
+const json = require('@rollup/plugin-json')
+const terser = require('@rollup/plugin-terser').default
 
 const pkg = JSON.parse(readFileSync('./package.json', 'utf-8'))
 
 // External dependencies for main build
-const external = [
-  ...Object.keys(pkg.dependencies || {}),
-  ...Object.keys(pkg.peerDependencies || {}),
-]
+const external = [...Object.keys(pkg.dependencies || {}), ...Object.keys(pkg.peerDependencies || {})]
 
 // Base ESBuild config
 const esbuildBase = {
@@ -27,7 +24,7 @@ const esbuildBase = {
 }
 
 // Main library config (external dependencies)
-export const mainConfig = {
+const mainConfig = {
   input: 'src/index.ts',
   output: [
     {
@@ -54,7 +51,7 @@ const serverlessPlugins = [
   esbuild(esbuildBase),
 ]
 
-export const serverlessConfig = [
+const serverlessConfig = [
   // ESM build
   {
     input: 'src/index.serverless.ts',
@@ -126,4 +123,4 @@ export const serverlessConfig = [
 ]
 
 // Export all configs
-export default [mainConfig, ...serverlessConfig]
+module.exports = [mainConfig, ...serverlessConfig]
