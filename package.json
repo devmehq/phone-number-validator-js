@@ -74,7 +74,7 @@
     ]
   },
   "dependencies": {
-    "bson": "^6.10.4",
+    "bson": "^7.0.0",
     "libphonenumber-js": "^1.12.15",
     "tiny-lru": "^11.4.5"
   },
