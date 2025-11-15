@@ -1,0 +1,116 @@
+name: Auto PR from Develop to Master
+
+on:
+  push:
+    branches:
+      - develop
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create-pr:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+          
+      - name: Check if PR already exists
+        id: check_pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_EXISTS=$(gh pr list --base master --head develop --state open --json number --jq length)
+          echo "pr_exists=$PR_EXISTS" >> $GITHUB_OUTPUT
+          
+      - name: Get version from package.json
+        if: steps.check_pr.outputs.pr_exists == '0'
+        id: get_version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+      - name: Get commits since last merge
+        if: steps.check_pr.outputs.pr_exists == '0'
+        id: get_commits
+        run: |
+          # Get the last merge commit to master
+          LAST_MERGE=$(git log master --merges --pretty=format:"%H" -n 1)
+          
+          # If no merge found, use the first commit on master
+          if [ -z "$LAST_MERGE" ]; then
+            LAST_MERGE=$(git rev-list --max-parents=0 master)
+          fi
+          
+          # Get commit list
+          COMMITS=$(git log --pretty=format:"- %s (%h)" ${LAST_MERGE}..develop | head -20)
+          
+          # Escape newlines for GitHub Actions output
+          COMMITS="${COMMITS//'%'/'%25'}"
+          COMMITS="${COMMITS//$'\n'/'%0A'}"
+          COMMITS="${COMMITS//$'\r'/'%0D'}"
+          
+          echo "commits=$COMMITS" >> $GITHUB_OUTPUT
+          
+      - name: Extract changelog for unreleased version
+        if: steps.check_pr.outputs.pr_exists == '0'
+        id: get_changelog
+        run: |
+          # Extract unreleased section from CHANGELOG.md
+          CHANGELOG=$(awk '/## v[0-9]+\.[0-9]+\.[0-9]+ \(Unreleased\)/,/## v[0-9]+\.[0-9]+\.[0-9]+[^(]/{if (/## v[0-9]+\.[0-9]+\.[0-9]+[^(]/) exit; print}' CHANGELOG.md | tail -n +2)
+          
+          # If no unreleased section found, try to get recent changes
+          if [ -z "$CHANGELOG" ]; then
+            CHANGELOG=$(awk '/## v[0-9]+\.[0-9]+\.[0-9]+/,/## v[0-9]+\.[0-9]+\.[0-9]+/{if (NR>1 && /## v[0-9]+\.[0-9]+\.[0-9]+/) exit; if (NR>1) print}' CHANGELOG.md | head -30)
+          fi
+          
+          # Escape special characters
+          CHANGELOG="${CHANGELOG//'%'/'%25'}"
+          CHANGELOG="${CHANGELOG//$'\n'/'%0A'}"
+          CHANGELOG="${CHANGELOG//$'\r'/'%0D'}"
+          
+          echo "changelog=$CHANGELOG" >> $GITHUB_OUTPUT
+          
+      - name: Create Pull Request
+        if: steps.check_pr.outputs.pr_exists == '0'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_TITLE="Release: Merge develop into master (v${{ steps.get_version.outputs.version }})"
+          
+          PR_BODY="## 🚀 Release Pull Request
+
+          This PR merges the latest changes from \`develop\` branch into \`master\` branch for release.
+
+          ### 📦 Version
+          \`v${{ steps.get_version.outputs.version }}\`
+
+          ### 📝 Changelog
+          ${{ steps.get_changelog.outputs.changelog }}
+
+          ### 📋 Recent Commits
+          ${{ steps.get_commits.outputs.commits }}
+
+          ---
+          
+          **Note:** This PR was automatically created by the Auto PR workflow.
+          Please review the changes before merging."
+          
+          gh pr create \
+            --title "$PR_TITLE" \
+            --body "$PR_BODY" \
+            --base master \
+            --head develop \
+            --label "release" \
+            --label "automated"
+            
+      - name: PR Already Exists
+        if: steps.check_pr.outputs.pr_exists != '0'
+        run: |
+          echo "ℹ️ Pull request from develop to master already exists"
+          gh pr list --base master --head develop --state open
