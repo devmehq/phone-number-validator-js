@@ -49,7 +49,7 @@
 - Integrate phone number verification into your mobile apps
 
 ## API / Cloud Hosted Service
-We offer this `phone verification and validation and more advanced features` in our Scalable Cloud API Service Offering - You could try it here [Phone Number Verification](https://phone-check.xyz/products/phone)
+We offer this `phone verification and validation and more advanced features` in our Scalable Cloud API Service Offering - You could try it here [Phone Number Verification](https://phone-check.app/products/phone)
 
 ---
 
@@ -367,9 +367,9 @@ Please feel free to open an issue or create a pull request and fix bugs or add f
 For issues, questions, or commercial licensing:
 
 🐛 [Open an Issue](https://github.com/devmehq/phone-number-validator-js/issues)
-📧 [Email Support](mailto:support@phone-check.xyz)
-📄 [Commercial License](https://phone-check.xyz/license/phone-number-validator)
-🌐 [Visit phone-check.xyz](https://phone-check.xyz)
+📧 [Email Support](mailto:support@phone-check.app)
+📄 [Commercial License](https://phone-check.app/license/phone-number-validator)
+🌐 [Visit phone-check.app](https://phone-check.app)
 
 ## LICENSE
 Business Source License 1.1 - see [LICENSE](LICENSE.md) file for details.
@@ -422,5 +422,5 @@ Ask yourself these questions:
 
 Ready to use phone-number-validator-js in production?
 
-🛍️ **[Purchase a License](https://phone-check.xyz/license/phone-number-validator)** - Simple pricing, instant activation  
-📧 **[Contact Sales](mailto:sales@phone-check.xyz?subject=Interested%20in%20phone-number-validator-js%20commercial%20license)** - For enterprise or custom needs
+🛍️ **[Purchase a License](https://phone-check.app/license/phone-number-validator)** - Simple pricing, instant activation  
+📧 **[Contact Sales](mailto:sales@phone-check.app?subject=Interested%20in%20phone-number-validator-js%20commercial%20license)** - For enterprise or custom needs
